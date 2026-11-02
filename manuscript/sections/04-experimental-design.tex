@@ -3,7 +3,7 @@
 \section{Experimental Design}
 \label{sec:design}
 
-\todo{Configurations (OBL start, 1--30 start, complete NSGAII-MIIP), population, classifiers, seeds, duplicate accounting and stagnation stop, statistical tests. Sources: related-work/NOVELTY.md (baselines, measurements and reporting) and evidence/H13-E01.}
+\todo{Statistical analysis (datasets as the unit, Wilcoxon with Holm, rank-biserial effect sizes, bootstrap intervals, Kaplan--Meier and restricted mean time to reach, logistic model of reach, missing-run sensitivity, Friedman test across classifiers) and the H14 pilot design. Source: evidence/H13-E01 and fastener-experiments H14.}
 
 \subsection{Datasets}
 \label{sec:datasets}
@@ -19,3 +19,19 @@ Every dataset is split once into stratified training, validation, and test parts
 Each run has a fixed budget of model fits. A subset that was evaluated before is taken from a cache of stored results and does not count against the budget. In the designed experiment, the budget is 6{,}000 fits, and 12{,}000 on arcene. In the benchmark, the budget was set for each dataset before the runs, from a calibration run of the FASTENER method on the validation part with a separate seed. It is the smallest of 1{,}000, 2{,}000, 4{,}000, 6{,}000, and 12{,}000 fits at which the calibration run's AUF was within 0.005 of its value at 12{,}000 fits and no more than 0.005 below that of a Boruta reference, increased by one step. This gives 2{,}000 to 12{,}000 fits. The budgets therefore follow the convergence of a different search method, not of NSGA-II.
 
 For comparisons of test scores at matched subset sizes, we use only datasets with more than 50 test rows. With fewer rows, a single misclassified row changes F1 by more than 0.02, the margin we use for these comparisons. This excludes BeetleFly (8 test rows), Coffee (11), OliveOil (12), BasicMotions (16), Prostate\_GE (20), arcene (40), and Ham (43) from these comparisons. All other analyses use every dataset. We set this rule after a first analysis that included BeetleFly and Coffee; with them, the margin is exceeded under the random forest.
+
+\subsection{Search Configurations}
+\label{sec:configurations}
+
+We compare three configurations of NSGA-II~\cite{Deb2002NSGAII}. All use the operators of NSGAII-MIIP~\cite{Li2025} in our own reimplementation, written from the authors' published description and code. They differ only in the initial population and in whether the improvement phase runs:
+\begin{itemize}
+  \item \textbf{Opposition-based start}: the opposition-based initialization of NSGAII-MIIP (Section~\ref{sec:access}), without the improvement phase.
+  \item \textbf{Sparse start}: subset sizes drawn uniformly from 1 to 30, then that many features drawn at random, without the improvement phase.
+  \item \textbf{Complete NSGAII-MIIP}: the opposition-based start with the mutual-information improvement phase. This configuration was run only in the benchmark.
+\end{itemize}
+
+The remaining settings are shared. The population has 100 subsets. Parents are chosen by binary tournament on front rank and then crowding distance. Each pair of parents is crossed with probability 0.9 by single-point crossover at a position where they differ. Each child is then changed by the balanced mutation of Section~\ref{sec:mutation} at the rate $1/d$. The next population is chosen from parents and children together by nondominated sorting and crowding distance. In the complete NSGAII-MIIP, the improvement phase runs in every generation on the current nondominated subsets. It discretizes each feature into ten equal-width bins, estimates mutual information between features and with the class, groups the features into clusters, and adds, removes, or exchanges features according to their relevance to the class and their redundancy with the selected features~\cite{Li2025}. The subsets it produces compete with the others in the next selection.
+
+Every new subset costs one model fit. All fits count against the budget of Section~\ref{sec:datasets}, including those of the improvement phase. A subset that was evaluated before is taken from the cache and costs nothing, so a run can propose far more subsets than it fits. A run ends when its budget is spent. In the benchmark runs with the random forest and LightGBM, a run also ends after 50 consecutive generations that produce no new subset. Without this rule, a run whose population produces only repeated subsets could continue for hundreds of thousands of generations without spending its budget. The runs with the decision tree have no such rule. Every benchmark run was limited to six hours, and runs that reached the limit are counted as missing. Twelve combinations of dataset and configuration were not run, because their estimated memory or time exceeded the available resources. We report how missing runs affect each result.
+
+Each configuration is run with five seeds, 2020 to 2024, on every dataset. The seed changes the search, not the data split. In the designed experiment, the classifier is a decision tree. In the benchmark, every dataset and configuration is run three times, each time with a different classifier: a decision tree, a random forest with 100 trees, and LightGBM. We treat the three as separate groups of runs. The tree and the forest use the scikit-learn defaults. LightGBM uses its defaults except for the smallest number of rows in a leaf, which is a twentieth of the training rows, between 1 and 20, so that the small datasets can still be split. All three use a fixed random state, so the same subset always receives the same score. The classifier both guides the search and produces the reported scores.

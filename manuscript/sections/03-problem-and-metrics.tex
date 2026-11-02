@@ -1,6 +1,55 @@
 % !TEX root = ../main.tex
 
-\section{Problem Setting and Metrics}
+\section{Problem Setting, Measures, and Analysis}
 \label{sec:metrics}
 
-\todo{Bi-objective formulation (subset size vs.\ predictive quality); definitions of cardinality reach and within-size quality; AUF as defined in~\cite{Koprivec2020}, presented as an existing measure and not a contribution. Keep the four observations separate (related-work/NOVELTY.md).}
+\subsection{Feature Selection with Two Objectives}
+\label{sec:problem}
+
+A dataset has $d$ features. A candidate subset is a binary vector $x \in \{0,1\}^d$, in which $x_j = 1$ means that feature $j$ is selected, and its size $|x| = \sum_j x_j$ is the number of selected features. We train a classifier on the training part using only the selected features and measure its weighted F1 score on the validation part; we write this score as $s(x)$. The search minimizes $|x|$ and maximizes $s(x)$. A subset dominates another if it is no worse in both objectives and better in at least one, and a run returns the subsets that no other subset in its final population dominates. We call this set the returned front. The empty subset cannot be evaluated and is given the worst score.
+
+\subsection{Area Under the Front}
+\label{sec:auf}
+
+We summarize a returned front with the area under the front (AUF) introduced with FASTENER~\cite{Koprivec2020}. For a limit of $k$ features, let $q(k)$ be the test F1 of the subset that has the highest validation score among the subsets on the front with at most $k$ features. If the front contains no subset with at most $k$ features, $q(k) = 0$. AUF averages these values over the limits $1, \dots, K$:
+\begin{equation}
+  \mathrm{AUF}_K = \frac{1}{K} \sum_{k=1}^{K} q(k).
+  \label{eq:auf}
+\end{equation}
+We use $K = 10$ throughout. A subset with three features contributes to every limit $k \geq 3$, so a missing subset of exactly four features does not by itself give a zero at $k = 4$. A zero means that the run returned nothing within the limit, not that it returned a subset that predicts poorly. Two runs with the same AUF can therefore differ in either respect, and the next subsection separates them.
+
+\subsection{Reach and Quality at Matched Sizes}
+\label{sec:reach}
+
+We say that a run \emph{reaches} the limit $k$ if its returned front contains a subset with at most $k$ features. For one configuration on one dataset, let $r(k)$ be the share of seeds whose run reaches $k$, and let $\bar{c}(k)$ be the mean of $q(k)$ over those seeds. We report $R = r(K)$, the share of runs that reach ten features. Averaged over seeds, AUF is then $K^{-1} \sum_k r(k)\,\bar{c}(k)$: it combines how often a limit is reached with how well the returned subsets predict when it is.
+
+To compare quality without the effect of reach, we compare two configurations $a$ and $b$ only at limits that both reach. The \emph{matched-size difference} is the mean of $\bar{c}_a(k) - \bar{c}_b(k)$ over the limits $k \leq K$ that both configurations reach in at least three of five seeds. We repeat the comparison with subsets of exactly $k$ features to check that the result does not depend on the at-most-$k$ convention. To state how much of an AUF difference comes from reach, we split the difference at each limit into a part due to $r_a(k) - r_b(k)$ and a part due to $\bar{c}_a(k) - \bar{c}_b(k)$, each weighted by the mean of the other quantity. Where one configuration never reaches $k$, the whole difference at that limit is counted as reach. This split is an accounting step for reporting results, not a new measure.
+
+A run's returned front is not the same as everything the run evaluated. A small subset can be evaluated, kept for some generations, and later replaced in the population. We therefore read the time at which a run first reaches the limit from its archive, the best subset of each size among all evaluated subsets, and we read reach at the end from the returned front. In all our runs, the archive and the returned front agree at the end of the run on whether the limit of ten features is reached.
+
+\subsection{Access to Small Subsets at Initialization}
+\label{sec:access}
+
+Whether the initial population already contains a small subset depends on how it is built. The opposition-based initialization used in NSGAII-MIIP~\cite{Li2025} builds 50 pairs for a population of 100. The first member of a pair selects each feature independently with probability one half, and the second selects exactly the features the first does not. If the first member has $m$ features, $m$ follows a binomial distribution with $d$ trials and probability one half, and its partner has $d - m$. A pair contains a non-empty subset with at most $K$ features with probability
+\begin{equation}
+  p_{\mathrm{pair}} = \Pr\left(1 \leq m \leq K \ \text{or}\ 1 \leq d - m \leq K\right),
+  \qquad m \sim \mathrm{Binomial}(d, \tfrac{1}{2}),
+  \label{eq:pair}
+\end{equation}
+and the population contains one with probability $1 - (1 - p_{\mathrm{pair}})^{50}$. For $K = 10$, this probability is 1 for 16 and 24 features, 0.43 for 36, 0.11 for 40, and below 0.01 from 46 features on. Beyond a few dozen features, the opposition-based search must therefore produce every small subset through crossover, mutation, and selection.
+
+The sparse initialization draws each subset size uniformly from 1 to 30 and then selects that many features at random~\cite{Miyandoab2024}. Each member has at most ten features with probability $1/3$, so a population of 100 lacks such a member with probability $(2/3)^{100} \approx 2.5 \times 10^{-18}$. It reaches the limit at the start, whatever the number of features.
+
+\subsection{How Often Mutation Changes a Subset}
+\label{sec:mutation}
+
+The balanced mutation of NSGAII-MIIP~\cite{Oh2004,Li2025} removes each selected feature with probability $\mu$ and adds each unselected feature with probability $\mu k / (d - k)$, where $k$ is the current subset size. With the rate $\mu = 1/d$ used here and $0 < k < d$, the expected numbers of removed and added features are both $k/d$:
+\begin{equation}
+  \mathrm{E}[\text{removed}] = k \cdot \frac{1}{d} = \frac{k}{d},
+  \qquad
+  \mathrm{E}[\text{added}] = (d - k) \cdot \frac{k}{d(d - k)} = \frac{k}{d}.
+  \label{eq:flips}
+\end{equation}
+The expected change in size is therefore zero, as intended, and the expected number of changed features is $2k/d$. For a small subset in a wide dataset, this is very small. With $d = 10{,}000$ and $k = 10$, it is 0.002, and a child is left unchanged by mutation with probability 0.998. For comparison, ordinary bit-flip mutation at the same rate changes one feature on average and changes the expected size by $1 - 2k/d$.
+
+Crossover cannot compensate when the parents are similar. The single-point crossover used here exchanges the parents' tails after a position at which they differ, so the two children together keep the parents' total number of selected features, and two identical parents produce identical children. Once a sparse population contains many copies of a few small subsets, most children therefore repeat subsets that have already been evaluated. A repeated subset is taken from the cache and costs no model fit, so the run proposes many subsets for each new fit. This account follows from the operators; it describes a mechanism that the results in Section~\ref{sec:results} are consistent with, not a proof that it is the only cause.
