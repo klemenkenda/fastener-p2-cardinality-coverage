@@ -11,7 +11,7 @@ The number of selected features, also called subset cardinality, is an establish
 
 Opposition-based initialization seeks diversity by pairing candidates with their opposites~\cite{Tizhoosh2005OBL}. In the binary representation used by NSGAII-MIIP, the opposite selects every feature excluded by the original candidate and excludes every feature it selected~\cite{Li2025}. With independent random inclusion at probability one half, both candidates have an expected size of half the available features. Complementary pairs therefore do not allocate the population evenly across subset sizes or guarantee the presence of small subsets. This distinction matters when comparing opposition-based and bounded sparse starts.
 
-Maintaining small subsets during search also depends on crossover, mutation, and the rule used to retain candidates. Methods that combine size-based initialization with adaptive crossover address both the initial population and the sizes of its descendants~\cite{Xue2022,Wang2026}. SparseEA and its feature-selection extensions combine initialization with feature scoring and search operators designed for sparse solutions~\cite{Tian2020SparseEA,Chu2024}. Selection can also preserve different subset sizes by retaining candidates from separate size groups~\cite{Li2026CORAL}. Together, these approaches show why an experiment that changes only the initial population differs from one that also changes how candidates are generated and retained.
+Maintaining small subsets during search also depends on crossover, mutation, and the rule used to retain candidates. Methods that combine size-based initialization with adaptive crossover address both the initial population and the sizes of its descendants~\cite{Xue2022,Wang2026}. FASTENER, an evolutionary wrapper developed for land-cover classification from Earth observation data, uses feature information to guide crossover toward smaller subsets and keeps the search population separate from the stored Pareto front~\cite{Koprivec2020}. SparseEA and its feature-selection extensions combine initialization with feature scoring and search operators designed for sparse solutions~\cite{Tian2020SparseEA,Chu2024}. Selection can also preserve different subset sizes by retaining candidates from separate size groups~\cite{Li2026CORAL}. Together, these approaches show why an experiment that changes only the initial population differs from one that also changes how candidates are generated and retained.
 
 The expected change in subset size and the amount of change produced by mutation are separate properties. Controlled mutation can balance the expected numbers of removed and added features~\cite{Oh2004,Li2025}. This keeps the expected subset size unchanged, although an individual child can contain more or fewer features than its parent. It also leaves open how often any feature changes. Under the implementation and mutation rate examined here, that frequency depends on the current subset size relative to the total number of features. The established balance property therefore provides a starting point for examining search activity, rather than evidence that small subsets are explored effectively.
 
@@ -19,7 +19,7 @@ An informed improvement phase provides another way to change the subsets produce
 
 A finite budget makes access to small subsets an empirical question even when the initialization can generate every subset size. Sampling from a broad range does not guarantee that a finite population contains a candidate within a particular small-size limit. Existing work addresses this issue through size sampling and later insertion of new candidates~\cite{Miyandoab2024}, as well as comparisons of sparse and dense starts under a fixed evaluation target~\cite{Cong2026}. Compact-front access is therefore already a subject of experimental study. For the present comparison, the relevant distinction is between supplying compact candidates at initialization and improving or discovering them during subsequent search.
 
-The evaluation measure determines how differences in subset-size coverage appear in the reported result. The area under the front (AUF) averages the best predictive score available with at most a given number of features over a range of feature-count limits~\cite{Koprivec2020}. A subset with three features can therefore contribute at limits of three, four, or more features; a missing subset of exactly four features does not by itself imply a missing score at that limit. Hypervolume measures the area between the front and a chosen reference point in this two-objective setting. Its value depends on both the extent of the front and the objective values, as well as the reference point~\cite{Auger2012}. We use AUF as defined there.
+The evaluation measure determines how differences in subset-size coverage appear in the reported result. FASTENER introduced the area under the front (AUF), which averages the best predictive score available with at most a given number of features over a range of feature-count limits~\cite{Koprivec2020}. A subset with three features can therefore contribute at limits of three, four, or more features; a missing subset of exactly four features does not by itself imply a missing score at that limit. Hypervolume measures the area between the front and a chosen reference point in this two-objective setting. Its value depends on both the extent of the front and the objective values, as well as the reference point~\cite{Auger2012}. We use the AUF definition from FASTENER.
 
 Repeated candidates connect search behavior to computational cost. Duplicate handling has been used to address lost diversity in evolutionary feature selection~\cite{Jiao2024PRDH,Wang2023Dup}, while caching stores evaluation results so that the same subset need not be fitted again~\cite{Li2020GADMS}. Removing duplicates changes the candidates considered by the search; reusing a stored result saves a fit. A run can consequently generate many candidates while consuming few new model fits. Reporting proposals, new fits, and elapsed time together follows the broader distinction between evaluation budgets and computational time in optimization benchmarking~\cite{BartzBeielstein2020}. It also helps distinguish productive search from repeated requests for previously evaluated subsets.
 
@@ -28,43 +28,47 @@ These studies establish the importance of initialization, subset-size control, f
 \subsection{Our Contributions in Relation to Existing Work}
 \label{sec:positioning}
 
-Most components of this study already exist in the literature. Table~\ref{tab:positioning} lists each component next to the closest prior work and states what this paper adds. We use it to keep the existing methods separate from our own analysis.
+Table~\ref{tab:positioning} lists the contributions of this paper in order of importance. For each, it states what is new here and which prior work it builds on.
 
-\begin{table}[t]
-\caption{Components of this study compared with the closest prior work}
+\begin{table}[!tbp]
+\caption{Contributions of this paper, in order of importance, and the prior work each builds on}
 \label{tab:positioning}
 \centering
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{22mm}>{\raggedright\arraybackslash}p{48mm}>{\raggedright\arraybackslash}p{48mm}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{22mm}>{\raggedright\arraybackslash}p{52mm}>{\raggedright\arraybackslash}p{44mm}@{}}
 \toprule
-Component & Established in prior work & What this paper adds \\
+Contribution & New in this paper & Builds on \\
 \midrule
-Size-based initialization
-  & Sampling a subset size and then that many features~\cite{Miyandoab2024}; sparse and size-allocated starts~\cite{Deniz2019,Kropp2022}.
-  & Nothing new in the procedure. We use it with the range 1--30 as one condition of a controlled comparison, and we calculate how likely a finite initial population is to contain a subset with at most $K$ features. \\
+Reach, not quality, explains the AUF gap
+  & On 46 datasets and three classifiers, 98--100\% of the AUF difference between the opposition-based and the sparse start comes from limits at which the opposition-based start returns no subset. At sizes both starts reach, their test F1 differs by less than 0.02.
+  & Sparse and dense starts compared for access to compact fronts in one gene-panel application~\cite{Cong2026}; AUF~\cite{Koprivec2020}, used unchanged. \\
 \addlinespace
-Balanced mutation
-  & The mutation rule~\cite{Oh2004}; the unchanged expected subset size~\cite{Li2025}.
-  & The expected number of changed features, $2k/d$ for interior $k$ in the tested implementation, and its link to repeated subsets served from the cache. This follows from the stated assumptions; it is not an empirical finding. \\
+When reach fails
+  & The probability that an initial population contains a small subset, and an observed boundary: the opposition-based search reaches ten features on every dataset with at most 99 features and on none with more than 512.
+  & Opposition-based initialization~\cite{Tizhoosh2005OBL,Li2025}; benefits of sparse sampling in large sparse problems~\cite{Kropp2022}. \\
 \addlinespace
-Keeping small subsets during search
-  & Adaptive crossover~\cite{Xue2022,Wang2026}; sparse operators~\cite{Tian2020SparseEA,Chu2024}; survival by size group~\cite{Li2026CORAL}.
-  & No new operator or survival rule. We change only the initial population of NSGA-II and compare with the complete NSGAII-MIIP, so the results describe these configurations. \\
+An informed improvement phase does not close the gap
+  & The mutual-information phase of NSGAII-MIIP raises the share of runs that reach ten features by only 0.04--0.08.
+  & NSGAII-MIIP~\cite{Li2025}. \\
 \addlinespace
-Repeated subsets and budget
-  & Duplicate handling~\cite{Jiao2024PRDH,Wang2023Dup}; caching~\cite{Li2020GADMS}; evaluation budget versus time~\cite{BartzBeielstein2020}.
-  & No new duplicate handling. We report proposed subsets, new model fits, and elapsed time together. \\
+The cost of a sparse start
+  & Neither start covers all subset sizes. The sparse start's best test F1 at any size is lower by 0.007--0.029 on average, and its fronts end by 36 features.
+  & Size sampling over a chosen range~\cite{Miyandoab2024}, used here with 1--30 features; size-allocated starts~\cite{Deniz2019}. \\
 \addlinespace
-Sparse versus dense starts under a budget
-  & An initialization ablation that asks whether compact fronts are reached within a fixed evaluation target~\cite{Cong2026}.
-  & 46 datasets with 16 to 192{,}000 features and three classifiers. We separate whether a run returns any subset with at most ten features from the score at sizes both runs reach, relate reach to the number of features, and report the best score among larger subsets, where the sparse start is often worse. \\
+Why the search stays near its start
+  & The expected number of changed features under balanced mutation, $2k/d$, and the observation that 96--99\% of the subsets proposed in sparse runs had already been evaluated.
+  & Balanced mutation~\cite{Oh2004} and its unchanged expected size~\cite{Li2025}; duplicate handling and caching~\cite{Jiao2024PRDH,Wang2023Dup,Li2020GADMS}. \\
+\addlinespace
+Reporting recommendations
+  & Quantities to report with AUF at a feature limit: reach, scores at sizes both methods reach, the best score at any size, proposals, new fits, time, and unfinished runs.
+  & Evaluation budgets versus computing time in benchmarking~\cite{BartzBeielstein2020}. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The closest overlaps are with two studies. Our bounded initialization is the procedure of Miyandoab et al.~\cite{Miyandoab2024}, with a narrower size range. The question of whether a sparse start gives access to compact fronts within a fixed budget is already asked in the ablation of Cong et al.~\cite{Cong2026}. We therefore do not claim a new initialization or mutation, and we do not claim to be the first to study initialization, sparse subsets, or evaluation budgets.
+These results change how a comparison at a small feature limit should be read. A large AUF difference there is usually taken to mean that one method searches better among small subsets. In the tested configurations, it means mainly that the other method returns no subset of that size at all. The boundary on the number of features tells a reader when to expect this: for an opposition-based start under budgets of 2{,}000 to 12{,}000 fits, from a few hundred features on. The same reading applies to any comparison in which one method starts from, or stays near, large subsets.
 
-What remains for this paper is the way these parts are combined and reported. The mutation analysis gives a reason to expect repeated subsets when the selected subsets are small. The experiments then show how large an AUF difference can be when one method returns no subset within the limit, and compare the scores at the sizes both methods reach, which exist only on datasets with few features. The usefulness of the paper therefore depends on whether this way of reporting changes how a comparison is read, not on the size of the AUF difference alone.
+Two studies are closest to ours. Miyandoab et al.~\cite{Miyandoab2024} introduced the size sampling that our sparse start uses, over all sizes and with later insertion of new candidates. We use it over 1 to 30 features, without insertion, as an experimental condition and not as a method of our own. Cong et al.~\cite{Cong2026} compare sparse and dense starts at a fixed evaluation target and report access to compact fronts in one gene-panel application. We ask a related question across 46 datasets and three classifiers, and add the separation of reach from quality at matched sizes, the dependence on the number of features, and the comparison with an informed improvement phase. The initialization, the mutation, and AUF are existing methods.
 
-The scope of the evidence also differs from related studies. We test NSGA-II with the genetic operators of Li et al.~\cite{Li2025}, with and without their mutual-information improvement phase. The results describe these configurations and the tested budgets and classifiers, not NSGA-II in general. Most datasets come from a broader benchmark whose runs we analyze after their results were known. Methods that change crossover or survival to keep small subsets~\cite{Xue2022,Li2026CORAL} address the same problem by other means, and we do not compare against them. The returned front shows which subset sizes survive to the end of a run. It does not show which sizes were visited during the search, which would require a record of all evaluated subsets.
+The scope of the evidence also differs from related studies. We test NSGA-II with the genetic operators of Li et al.~\cite{Li2025}, with and without their mutual-information improvement phase. The results describe these configurations and the tested budgets and classifiers, not NSGA-II in general. Most datasets come from a broader benchmark whose runs we analyze after their results were known. Methods that change crossover or survival to keep small subsets~\cite{Xue2022,Wang2026,Tian2020SparseEA,Chu2024,Li2026CORAL} address the same problem by other means, and we do not compare against them. The returned front shows which subset sizes survive to the end of a run. It does not show which sizes were visited during the search, which would require a record of all evaluated subsets.

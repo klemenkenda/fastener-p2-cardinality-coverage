@@ -3,7 +3,19 @@
 \section{Experimental Design}
 \label{sec:design}
 
-\todo{Datasets, NSGA-II configuration (NSGAII-MIIP operator port without the MI improvement phase), baselines, budgets in model fits, duplicate accounting, seeds, statistical tests. Source: related-work/NOVELTY.md (baselines, measurements and reporting).}
+\todo{Configurations (OBL start, 1--30 start, complete NSGAII-MIIP), population, classifiers, seeds, duplicate accounting and stagnation stop, statistical tests. Sources: related-work/NOVELTY.md (baselines, measurements and reporting) and evidence/H13-E01.}
 
-\todo{Data description (to be expanded with the full dataset list).}
+\subsection{Datasets}
+\label{sec:datasets}
+
+\input{tables/datasets}
+
+We use 46 classification datasets with 16 to 192{,}000 features and 2 to 39 classes (Table~\ref{tab:datasets}). Eight of them come from an experiment designed for this comparison and were chosen to cover feature counts from 36 to 10{,}000. They are EOData, a land-cover dataset built from Sentinel-2 satellite observations~\cite{Sircelj2020EOData} for which FASTENER was developed~\cite{Koprivec2020}; satimage and har from OpenML~\cite{Vanschoren2014OpenML}; and USPS, COIL20, gisette, Prostate\_GE, and arcene from the scikit-feature repository~\cite{Li2017ScikitFeature}. The other 38 datasets come from the UCR and UEA time series archives~\cite{Dau2019UCR,Bagnall2018UEA} and were run, together with EOData, in a broader benchmark of feature-selection methods. They were chosen to cover the range of dataset shapes in the archives: the archive datasets were grouped by the logarithms of their numbers of examples and features with $k$-means ($k = 7$), and three to seven datasets were taken from each group.
+
+In the time series datasets, one row is one series, and its time points are the features. For a series with several channels, each pair of a channel and a time point is a feature. Neighboring time points are strongly correlated, so these datasets contain many redundant features, which is the situation feature selection is meant to address.
+
+Every dataset is split once into stratified training, validation, and test parts in the proportions 60/20/20. The split is the same for all seeds and configurations. For the time series, we merge the training and test parts of the archive before splitting, so published accuracies on these datasets are not comparable with ours. EOData has 480{,}000 rows, of which we use a fixed stratified sample of 50{,}000. The search and the choice of the best subset at each size use only the validation part; the test part is used once, for the reported scores. The split of EOData is random rather than spatial, because the published data contain no parcel identifiers. Neighboring pixels of one field can therefore fall into different parts, and its test scores are likely optimistic.
+
+Each run has a fixed budget of model fits. A subset that was evaluated before is taken from a cache of stored results and does not count against the budget. In the designed experiment, the budget is 6{,}000 fits, and 12{,}000 on arcene. In the benchmark, the budget was set for each dataset before the runs, from a calibration run of the FASTENER method on the validation part with a separate seed. It is the smallest of 1{,}000, 2{,}000, 4{,}000, 6{,}000, and 12{,}000 fits at which the calibration run's AUF was within 0.005 of its value at 12{,}000 fits and no more than 0.005 below that of a Boruta reference, increased by one step. This gives 2{,}000 to 12{,}000 fits. The budgets therefore follow the convergence of a different search method, not of NSGA-II.
+
 For comparisons of test scores at matched subset sizes, we use only datasets with more than 50 test rows. With fewer rows, a single misclassified row changes F1 by more than 0.02, the margin we use for these comparisons. This excludes BeetleFly (8 test rows), Coffee (11), OliveOil (12), BasicMotions (16), Prostate\_GE (20), arcene (40), and Ham (43) from these comparisons. All other analyses use every dataset. We set this rule after a first analysis that included BeetleFly and Coffee; with them, the margin is exceeded under the random forest.
