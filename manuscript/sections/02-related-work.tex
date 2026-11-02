@@ -11,8 +11,52 @@ The expected change in subset size and the amount of change produced by mutation
 
 A finite budget makes access to small subsets an empirical question even when the initialization can generate every subset size. Sampling from a broad range does not guarantee that a finite population contains a candidate within a particular small-size limit. Existing work addresses this issue through size sampling and later insertion of new candidates~\cite{Miyandoab2024}, as well as comparisons of sparse and dense starts under a fixed evaluation target~\cite{Cong2026}. Compact-front access is therefore already a subject of experimental study. For the present comparison, the relevant distinction is between supplying compact candidates at initialization and improving or discovering them during subsequent search.
 
-The evaluation measure determines how differences in subset-size coverage appear in the reported result. The area under the front (AUF) averages the best predictive score available with at most a given number of features over a range of feature-count limits~\cite{Koprivec2020}. A subset with three features can therefore contribute at limits of three, four, or more features; a missing subset of exactly four features does not by itself imply a missing score at that limit. Hypervolume measures the area between the front and a chosen reference point in this two-objective setting. Its value depends on both the extent of the front and the objective values, as well as the reference point~\cite{Auger2012}. We retain the established AUF measure and state the zero convention for limits with no available subset explicitly. This supports a separate examination of whether a limit is met and how well the available subsets predict.
+The evaluation measure determines how differences in subset-size coverage appear in the reported result. The area under the front (AUF) averages the best predictive score available with at most a given number of features over a range of feature-count limits~\cite{Koprivec2020}. A subset with three features can therefore contribute at limits of three, four, or more features; a missing subset of exactly four features does not by itself imply a missing score at that limit. Hypervolume measures the area between the front and a chosen reference point in this two-objective setting. Its value depends on both the extent of the front and the objective values, as well as the reference point~\cite{Auger2012}. We use AUF as defined there.
 
 Repeated candidates connect search behavior to computational cost. Duplicate handling has been used to address lost diversity in evolutionary feature selection~\cite{Jiao2024PRDH,Wang2023Dup}, while caching stores evaluation results so that the same subset need not be fitted again~\cite{Li2020GADMS}. Removing duplicates changes the candidates considered by the search; reusing a stored result saves a fit. A run can consequently generate many candidates while consuming few new model fits. Reporting proposals, new fits, and elapsed time together follows the broader distinction between evaluation budgets and computational time in optimization benchmarking~\cite{BartzBeielstein2020}. It also helps distinguish productive search from repeated requests for previously evaluated subsets.
 
 These studies establish the importance of initialization, subset-size control, front evaluation, and repeated candidates. Our focus is how these factors affect the interpretation of a comparison within a specified evolutionary configuration. We connect an analysis of initialization and mutation to evidence from the returned fronts, keeping access to a size limit separate from predictive quality at a fixed size. This scope also distinguishes what the final output shows from what would require a history of all evaluated candidates.
+
+\subsection{Our Contributions in Relation to Existing Work}
+\label{sec:positioning}
+
+Most components of this study already exist in the literature. Table~\ref{tab:positioning} lists each component next to the closest prior work and states what this paper adds. We use it to keep the existing methods separate from our own analysis.
+
+\begin{table}[t]
+\caption{Components of this study compared with the closest prior work}
+\label{tab:positioning}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{22mm}>{\raggedright\arraybackslash}p{48mm}>{\raggedright\arraybackslash}p{48mm}@{}}
+\toprule
+Component & Established in prior work & What this paper adds \\
+\midrule
+Size-based initialization
+  & Sampling a subset size and then that many features~\cite{Miyandoab2024}; sparse and size-allocated starts~\cite{Deniz2019,Kropp2022}.
+  & Nothing new in the procedure. We use it with the range 1--30 as one condition of a controlled comparison, and we calculate how likely a finite initial population is to contain a subset with at most $K$ features. \\
+\addlinespace
+Balanced mutation
+  & The mutation rule~\cite{Oh2004}; the unchanged expected subset size~\cite{Li2025}.
+  & The expected number of changed features, $2k/d$ for interior $k$ in the tested implementation, and its link to repeated subsets served from the cache. This follows from the stated assumptions; it is not an empirical finding. \\
+\addlinespace
+Keeping small subsets during search
+  & Adaptive crossover~\cite{Xue2022,Wang2026}; sparse operators~\cite{Tian2020SparseEA,Chu2024}; survival by size group~\cite{Li2026CORAL}.
+  & No new operator or survival rule. We change only the initial population of a fixed NSGA-II configuration, so the results describe that configuration. \\
+\addlinespace
+Repeated subsets and budget
+  & Duplicate handling~\cite{Jiao2024PRDH,Wang2023Dup}; caching~\cite{Li2020GADMS}; evaluation budget versus time~\cite{BartzBeielstein2020}.
+  & No new duplicate handling. We report proposed subsets, new model fits, and elapsed time together. \\
+\addlinespace
+Sparse versus dense starts under a budget
+  & An initialization ablation that asks whether compact fronts are reached within a fixed evaluation target~\cite{Cong2026}.
+  & Eight datasets with 36 to 10{,}000 features. We relate the AUF difference at ten features to whether the returned fronts contain compact subsets, and we report unrestricted predictive performance separately, including the cases where the sparse start is worse. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The closest overlaps are with two studies. Our bounded initialization is the procedure of Miyandoab et al.~\cite{Miyandoab2024}, with a narrower size range. The question of whether a sparse start gives access to compact fronts within a fixed budget is already asked in the ablation of Cong et al.~\cite{Cong2026}. We therefore do not claim a new initialization or mutation, and we do not claim to be the first to study initialization, sparse subsets, or evaluation budgets.
+
+What remains for this paper is the way these parts are combined and reported. The mutation analysis gives a reason to expect repeated subsets when the selected subsets are small. The experiment then shows how large an AUF difference can be when one method returns no subset within the limit, and it reports separately whether a method finds such a subset and how well its subsets predict. The usefulness of the paper therefore depends on whether this way of reporting changes how a comparison is read, not on the size of the AUF difference alone.
+
+The scope of the evidence also differs from related studies. We test NSGA-II with the genetic operators of Li et al.~\cite{Li2025}, without their mutual-information improvement phase, so the results do not describe the complete algorithm of that study or NSGA-II in general. Methods that change crossover or survival to keep small subsets~\cite{Xue2022,Li2026CORAL} address the same problem by other means, and we do not compare against them. The returned front shows which subset sizes survive to the end of a run. It does not show which sizes were visited during the search, which would require a record of all evaluated subsets.
