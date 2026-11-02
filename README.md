@@ -32,12 +32,19 @@ To je uporaben rezultat o dosegljivosti majhnih podmnožic. Ne dokazuje, da redk
 
 Za samostojen P2 bi potrebovali več kot dodatne zbirke ali drugo ime za isto inicializacijo: preverjeno razlago, ki spremeni prakso vrednotenja in velja tudi zunaj uporabljene konfiguracije. Tudi negativen rezultat je lahko uporaben, vendar mora povedati nekaj, česar najbližja dela še ne povedo.
 
+## Rokopis (ComSIS)
+
+Ciljna revija je *Computer Science and Information Systems (ComSIS)*. Rokopis je v [manuscript/](manuscript/): `main.tex` vključuje razdelke iz `manuscript/sections/`, slike so v `manuscript/figures/`, literatura je skupna datoteka [references.bib](references.bib). Izvirna predloga in povzetek zahtev revije sta v [template/comsis/](template/comsis/).
+
+Prevajanje v VS Code, podobno Overleafu: razširitev LaTeX Workshop (priporočena v `.vscode/extensions.json`) ob vsakem shranjevanju prevede `manuscript/main.tex` v `manuscript/build/main.pdf` in ga odpre v zavihku na desni. Ctrl+Alt+J skoči iz izvorne kode na mesto v PDF-ju, Ctrl+klik v PDF-ju skoči nazaj. Potrebna je distribucija TeX z `latexmk` (MiKTeX ali TeX Live); druga možnost je recept `tectonic`. Iz ukazne vrstice: `cd manuscript && latexmk main.tex`.
+
 ## Vsebina repozitorija
 
 - [RELATED-WORK.md](RELATED-WORK.md): literatura, prekrivanje trditev in omejitve pregleda.
 - [EVIDENCE.md](EVIDENCE.md): obstoječi rezultati, pregled operatorjev in izvor dokazov.
 - [RESEARCH-PLAN.md](RESEARCH-PLAN.md): kandidatna vrzel, omejen pilot in merila za nadaljevanje.
 - [references.bib](references.bib): bibliografsko jedro.
+- [manuscript/](manuscript/): rokopis za ComSIS; [template/comsis/](template/comsis/): izvirna predloga revije.
 - [evidence/H1_auf10_per_seed.csv](evidence/H1_auf10_per_seed.csv): nespremenjen posnetek izvorne tabele; [manifest](evidence/PROVENANCE.json) vsebuje izvor in SHA-256.
 
 Predlog ne registrira novega eksperimenta. Izvorna koda, surovi podatki in celotni dnevniki tekov ostajajo v eksperimentalnem projektu FASTENER; ta začetni repozitorij še ni paket za popolno reprodukcijo. Bibliografija povezuje izvirnike, njihovih PDF-jev ne vključuje.

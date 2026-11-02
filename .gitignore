@@ -17,9 +17,16 @@ data/
 *.log
 *.out
 *.synctex.gz
+*.synctex(busy)
+*.toc
+*.lof
+*.lot
+manuscript/build/
 
 # Editor and OS files
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 .DS_Store
 Thumbs.db

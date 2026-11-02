@@ -1,0 +1,39 @@
+{
+  // Overleaf-style workflow with LaTeX Workshop: build on save, PDF in a side tab,
+  // SyncTeX (Ctrl+Alt+J jumps from source to PDF; Ctrl+click in the PDF jumps back).
+  "latex-workshop.latex.rootFile.useSubFile": false,
+  "latex-workshop.latex.search.rootFiles.include": ["manuscript/main.tex"],
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.recipes": [
+    { "name": "latexmk (pdflatex + bibtex)", "tools": ["latexmk"] },
+    { "name": "tectonic", "tools": ["tectonic"] }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": ["-pdf", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "-outdir=%OUTDIR%", "%DOC%"],
+      "env": {}
+    },
+    {
+      "name": "tectonic",
+      "command": "tectonic",
+      "args": ["-X", "compile", "--synctex", "--keep-logs", "--outdir=%OUTDIR%", "%DOC%.tex"],
+      "env": {}
+    }
+  ],
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.tab.editorGroup": "right",
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.message.warning.show": false,
+  "latex-workshop.latex.autoClean.run": "never",
+  "[latex]": {
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": false
+  },
+  "files.associations": { "*.cls": "latex", "*.sty": "latex" },
+  "ltex.language": "en-GB",
+  "ltex.enabled": ["latex", "bibtex"]
+}
