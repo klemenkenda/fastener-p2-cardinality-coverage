@@ -13,7 +13,7 @@ Read NOVELTY.md first for the assessment and required experimental controls, the
 | ../RELATED-WORK.md | Verified core list and 42 annotated references grouped by topic, with source links, reading depth and overlap limits. |
 | NOVELTY.md | Claim revisions, reach/quality definitions, AUF/HV relationship, pilot controls, budget/reporting requirements and review risks. |
 | COMPARISON.csv | One row per catalogue paper; UTF-8 with BOM, quoted CSV fields and the requested columns. |
-| ../references.bib | Matching BibTeX entries; verified bibliographic fields, UTF-8 names, and explicit notes for unverified content/DOI fields. |
+| ../manuscript/references.bib | Matching BibTeX entries; verified bibliographic fields, UTF-8 names, and explicit notes for unverified content/DOI fields. |
 | SEARCH-LOG.md | Queries, databases, counts, access limits, citation tracing and returned-title audit inventory. |
 | OUTLINE.md | Five-paragraph related-work outline targeting about 1-1.5 manuscript pages. |
 | CORRECTIONS.md | Reference corrections/completions and actual DOI-routing/access results for all supplied items and leads. |

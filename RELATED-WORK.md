@@ -23,7 +23,7 @@ The published algorithm starts over `1..d` and later inserts new solutions; H1 u
 | H1 proves that NSGA-II generally performs poorly at small k. | Unsupported: NSGA-II does not prescribe these operators or this initialisation. |
 | Evaluation should separate reach, improvement after initialisation, and quality conditional on size. | A useful methodological question whose independent novelty remains unproven. |
 
-The earlier targeted review of 31 October 2026 rejected the broad new-initialiser claim. The expanded review below retains that conclusion and updates the reading depth and follow-up status of the original leads. Neither review reproduces the competing methods or establishes an exhaustive absence of prior work. The bibliography is consolidated in [references.bib](references.bib).
+The earlier targeted review of 31 October 2026 rejected the broad new-initialiser claim. The expanded review below retains that conclusion and updates the reading depth and follow-up status of the original leads. Neither review reproduces the competing methods or establishes an exhaustive absence of prior work. The bibliography is consolidated in [references.bib](manuscript/references.bib).
 
 ## Verified core list
 
