@@ -1,0 +1,147 @@
+{
+    "copy_date": "2026-11-02",
+    "experiment": "H13-E01",
+    "status": "post hoc secondary analysis (DEC-55); verdict as registered: not supported, part (b) fails under the random forest",
+    "experiments_repository": "https://github.com/klemenkenda/fastener-experiments",
+    "experiments_commit": "e0239331a60372d2ab728df048542d9673c3955a",
+    "analysed_runs": "1,544 finished runs of nsga2, nsga2_sparse and nsgaii_miip from H1-E02 and H5H6-E01 to -E03 (experiments/distilled_logs/)",
+    "source_paths_relative_to": "fastener-experiments repository root",
+    "sources": [
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q1_criterion.csv",
+            "sha256": "c11dfda08fa56195eb2294bf537167c495cf173c9734a95c9027c27b2b91f122",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q1_terms.csv",
+            "sha256": "b100414f2fc9140c6010a0504807a82f7d6462cd3f5d0784791e4e9eef215a2a",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q2_reach_by_dataset.csv",
+            "sha256": "376db6f0cda98af87d951ae349ddc34784a9caf8c42d3263662a86be052bea74",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q2_reach_model.csv",
+            "sha256": "54dbd9cd5ae93fb78dc0c9057b37cd2dbde505e5ef2ffd7b121c52acc8adfe64",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q3_pairs.csv",
+            "sha256": "a35c6563bcc9c247f89012bc03bd65328c4e6be072aead27325a2ff33c8f1817",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q4_large_end.csv",
+            "sha256": "398f00ba8fedf324fd4389ab20bbd30af2164c0b58020436924372ccee19db5e",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q5_missing.csv",
+            "sha256": "5fe4252414b9d3d912a3713941b040f71332b2775df057b2ffc4f1e6e7d07b6c",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q5_sensitivity.csv",
+            "sha256": "27fa4583af973a0f3b3cdc7bb92371f9a24922a0248cd101d2e74e60f0fc45a2",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q6_classifier.csv",
+            "sha256": "1c8a6c83c99a6866996f49540364e73064f90d07a08f6f2a6a4448387f4da82d",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q7_rmst.csv",
+            "sha256": "a5141ea7ac36db62c9b31d3b7c62c776c99556b65ee538e3a03ac94ab1db5e68",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q7_time_to_reach.csv",
+            "sha256": "5024f7e0f897159093d059c87c5b3892ca1aefd6a7256e7f7cd7ee2424069e7d",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q8_by_dataset.csv",
+            "sha256": "37fcefd14d549b948fd2e33ea985923a645d4fe6967b92bb0b60747b45317c66",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q8_stagnation.csv",
+            "sha256": "dcff4bb6c6f2f56a306c47b68efaa3e6c61aa99e1ad766f9664ac3945d183565",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/reproduction.csv",
+            "sha256": "56025e3c327773968c771b6eff750e5e00d1112da6cae5809742547acf9bdcc6",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F1_H13_criterion.png",
+            "sha256": "95421c13015abd6c46df7285c5cabc0ec9073d45c29db3b4f98e71a300f8e565",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F2_reach_vs_d.png",
+            "sha256": "072a70b2818d339f1f00be2f65d0c3665f8da402f698cc231ca3aa1630b6c315",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F3_three_arms.png",
+            "sha256": "3a9d2ca639aaa90821352b51cd44cb83e2a3efa204f59150767c10fd92d201db",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F4_large_end.png",
+            "sha256": "c32e61a0c30461d7cbb87406a376a5e7106ef9c948a093cc06884a90843bac41",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F5_missing_sensitivity.png",
+            "sha256": "c7386ef5432729d5c5a0ecd274a818df6b066db4dd341d1da09c6e0f9f7a0be8",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F6_time_to_reach.png",
+            "sha256": "0a0a623a696982334f2bdfbe3c25c7688a77304160c6da91122be2c2f44d67e7",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F7_repeats_and_stagnation.png",
+            "sha256": "c47aeae9dc15f1fd43238a0340aa3abb3b03e4e62c48ee982c7548cc1a76f52c",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/figures/F8_classifier.png",
+            "sha256": "91f3848cb78e2b6b1b3d1cb694353c499e9f00b1e9e5c042d0bdb85eefd7951c",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/REPORT.md",
+            "sha256": "8770acd8d3d4a2523981ffca298a04e2244ad102394e5c230683db82de4e71bf",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/SUPPORT.md",
+            "sha256": "2d948d3f4e6843459b3907c5aa7264b7137e59068be02436e1e445df4d918955",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/verdict.json",
+            "sha256": "a51e4561696330bc050339918f1bfab939765a3c6d86a1bd8b3f369235e31559",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/h13_coverage.py",
+            "sha256": "da4c604e12fbc143e271b88688ad9b7b2c53bcfd59a5625d40b3feedffa1f7b4",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/h13_report.py",
+            "sha256": "2fd469097fedf69660780bbd63f373b7007d3b2a8eb79e341602c7e4e15ab304",
+            "copied": false
+        }
+    ],
+    "scope": "Copied unchanged; only the tables and figures P2 cites. Per-run measures (run_measures.csv) and missing-cell lists stay in the source repository."
+}

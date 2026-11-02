@@ -4,3 +4,6 @@
 \label{sec:design}
 
 \todo{Datasets, NSGA-II configuration (NSGAII-MIIP operator port without the MI improvement phase), baselines, budgets in model fits, duplicate accounting, seeds, statistical tests. Source: related-work/NOVELTY.md (baselines, measurements and reporting).}
+
+\todo{Data description (to be expanded with the full dataset list).}
+For comparisons of test scores at matched subset sizes, we use only datasets with more than 50 test rows. With fewer rows, a single misclassified row changes F1 by more than 0.02, the margin we use for these comparisons. This excludes BeetleFly (8 test rows), Coffee (11), OliveOil (12), BasicMotions (16), Prostate\_GE (20), arcene (40), and Ham (43) from these comparisons. All other analyses use every dataset. We set this rule after a first analysis that included BeetleFly and Coffee; with them, the margin is exceeded under the random forest.
