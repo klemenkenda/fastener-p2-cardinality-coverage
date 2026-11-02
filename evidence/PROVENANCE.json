@@ -1,0 +1,38 @@
+{
+    "review_date":  "2026-10-31",
+    "experiment":  "H1-E02",
+    "reviewed_experiments_commit":  "e8f91c4ce4add8c00a4205258d9ae2879c5e9876",
+    "reviewed_fastener_commit":  "047e1fb362089c6bb930c7817431981d7dd6ca3d",
+    "run_experiments_commit_as_recorded":  "c142251",
+    "run_fastener_commit_as_recorded":  "08e6acd",
+    "copied_csv":  "H1_auf10_per_seed.csv",
+    "source_paths_relative_to":  "FASTENER experiment workspace",
+    "sources":  [
+                    {
+                        "source_path":  "experiments/reports/H1-E02/REPORT.md",
+                        "sha256":  "a058f24e89eb89c9ee721287d68dd622ad5e03cb8df8cb0d3379a5e7efa31702",
+                        "copied":  false
+                    },
+                    {
+                        "source_path":  "experiments/reports/H1-E02/SUPPORT.md",
+                        "sha256":  "3d2b487f7cd0a8f4da1cedf02f79f2d69ebdb3ddeb9b9da65e433035af65b190",
+                        "copied":  false
+                    },
+                    {
+                        "source_path":  "experiments/reports/H1-E02/tables/H1_auf10_per_seed.csv",
+                        "sha256":  "2315d271b880845560902b40614794aa8ee321c27976c6eb0ee5e49c20348356",
+                        "copied":  true
+                    },
+                    {
+                        "source_path":  "experiments/sota_baselines.py",
+                        "sha256":  "1db30e7eb24e0001cffba3225f3e6d2a6fb8e79af1635d2cf12fa274b15b5358",
+                        "copied":  false
+                    },
+                    {
+                        "source_path":  "experiments/nsgaii_miip.py",
+                        "sha256":  "9917c1cb0a2824abfc18849804f8b4138adcef69a0f9a529512bbe4a0c6479a8",
+                        "copied":  false
+                    }
+                ],
+    "scope":  "Descriptive table rechecked; no model fits or historical experiment reproduction performed."
+}
