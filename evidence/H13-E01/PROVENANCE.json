@@ -1,9 +1,9 @@
 {
     "copy_date": "2026-11-02",
     "experiment": "H13-E01",
-    "status": "post hoc secondary analysis (DEC-55); verdict as registered: not supported, part (b) fails under the random forest",
+    "status": "post hoc secondary analysis (DEC-55); verdict as registered: not supported, part (b) fails under the random forest. DEC-57 (post hoc, PI): part (b) without datasets with at most 50 test rows, tables q1_criterion_min_test50*.csv; verdict unchanged",
     "experiments_repository": "https://github.com/klemenkenda/fastener-experiments",
-    "experiments_commit": "e0239331a60372d2ab728df048542d9673c3955a",
+    "experiments_commit": "354c307d2fc0fa9e8b11f75d95f4fd432ff23cf4",
     "analysed_runs": "1,544 finished runs of nsga2, nsga2_sparse and nsgaii_miip from H1-E02 and H5H6-E01 to -E03 (experiments/distilled_logs/)",
     "source_paths_relative_to": "fastener-experiments repository root",
     "sources": [
@@ -119,7 +119,7 @@
         },
         {
             "source_path": "experiments/reports/H13-E01/REPORT.md",
-            "sha256": "8770acd8d3d4a2523981ffca298a04e2244ad102394e5c230683db82de4e71bf",
+            "sha256": "74e11df83f656764c272e2a84615480859a9dc93097932a581d3e0c555c5dca4",
             "copied": false
         },
         {
@@ -139,8 +139,18 @@
         },
         {
             "source_path": "experiments/h13_report.py",
-            "sha256": "2fd469097fedf69660780bbd63f373b7007d3b2a8eb79e341602c7e4e15ab304",
+            "sha256": "08a9837d049eb5810a8732e128fdc27f09ba35db387e8792313115bffa2c5b85",
             "copied": false
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q1_criterion_min_test50.csv",
+            "copied": true,
+            "sha256": "baa749b29447b48c17be00c4a86b41ec50ad2425885cd6db77e917b500f845cb"
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/q1_criterion_min_test50_exact.csv",
+            "copied": true,
+            "sha256": "7776d6822cdcee844005dca96f37f8a3f9487b4b67fc342143b5060a7f4d6438"
         }
     ],
     "scope": "Copied unchanged; only the tables and figures P2 cites. Per-run measures (run_measures.csv) and missing-cell lists stay in the source repository."
