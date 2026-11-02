@@ -1,0 +1,96 @@
+{
+    "copy_date": "2026-11-02",
+    "experiment": "H14-E02",
+    "status": "P2 pilot on development datasets (DEC-56, rerun DEC-58); not supported on all three parts as registered; guides design, confirms nothing",
+    "experiments_repository": "https://github.com/klemenkenda/fastener-experiments",
+    "experiments_commit": "e44fd742173b1150a8cd88819e337d3b0e2f43dc",
+    "source_paths_relative_to": "fastener-experiments repository root",
+    "sources": [
+        {
+            "source_path": "experiments/reports/H14-E02/tables/criterion.csv",
+            "sha256": "b1bf3ebcd535053033e30d760ac2c285676ba6a6860a240ae3834215a0a08198",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/matched.csv",
+            "sha256": "ddd16404e2ae54e63e407260dc658b310b14034f80ff02748086f19bd91ba319",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/pairs.csv",
+            "sha256": "dbc2c28f0d4f38e01d79e924b6155bd7ed562fa670ed4ef0d8a934c4441bb866",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/per_arm.csv",
+            "sha256": "c11b4843ed0be90c28ef49a977c0383a61f4b58a91ae0b49aae79120e437b38d",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/run_measures.csv",
+            "sha256": "4f40c157716b572df8b09cf410bb161184789251158a9e835e43128c9e53cd0b",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/start_check.csv",
+            "sha256": "980abdd1187bf17fa967c256b4a5e95a88bb68fdc5c7e3ea4683848d02d6d5d9",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/subset_summary.csv",
+            "sha256": "2e289d596b7382ccbb1fb75ea5bddcd2326cb132c82a763040a88b2b32f366ea",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/tables/verdict.json",
+            "sha256": "3ac00ae037ac2ef629f54aee50dccb63b4128a1e43a9a04deea604e88ada8afe",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/figures/F1_starts.png",
+            "sha256": "6d3bcbbfe181e34c51224f7d583a82e99f7d79637177dea1349194e0631a9187",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/figures/F2_obl_budget_sweep.png",
+            "sha256": "cfd6bea11c969e1d46a4d1378fe0a3a271cd1429224284d2559bd996fd11f461",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/figures/F3_min1.png",
+            "sha256": "918eda826be592faa28297418f7dcd95aa8aa18b29deeda439abb3cd0b66531b",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/figures/F4_flips_2k_over_d.png",
+            "sha256": "f132bcdf2b15729be3f0435a5b1555b14a4eca52ed4fe05b396f4195415702db",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/figures/F5_min1_cost.png",
+            "sha256": "cf3cf0831ff9b6b8014887f7515d9d7f657a90b87e9e4e0ffc542840259c8ee8",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/REPORT.md",
+            "sha256": "70ee20ea5ee8013b30e2675d7b1a81e871330a3bbe272c7e486249bf3e3bcca7",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/reports/H14-E02/SUPPORT.md",
+            "sha256": "c31ddf1097c002b9d266748d9a51677d458280772e3e071f569aea23e9cdc3d8",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/h14_report.py",
+            "sha256": "75878415a65437ff6014e4f0fb58af3d7dca1cc660609ae879b6c22a53337c52",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/subset_log.py",
+            "sha256": "210748566eed89a658e0054d076c26d55d0cd07addf4b576fb1fa3f55b2f5e4b",
+            "copied": false
+        }
+    ],
+    "scope": "Report tables and figures copied unchanged; REPORT.md, SUPPORT.md and the analysis code hashed, not copied."
+}

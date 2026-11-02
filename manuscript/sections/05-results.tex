@@ -3,4 +3,128 @@
 \section{Results}
 \label{sec:results}
 
-\todo{Report reach, post-initialization progress and within-size quality separately; show where method rankings change.}
+% Numbers: evidence/H13-E01 (fastener-experiments 354c307) and evidence/H14-E02 (e44fd74);
+% figures: figures/make_figures.py.
+
+\subsection{The AUF Difference Is a Difference in Reach}
+\label{sec:res-reach}
+
+\input{tables/criterion}
+
+With a limit of ten features, the sparse start has a much higher AUF than the opposition-based start: in the three benchmark groups, the mean difference per dataset is 0.42 to 0.49. Table~\ref{tab:criterion} shows where this difference comes from. On no dataset in any group does the opposition-based start reach the limit in more seeds than the sparse start. The ties are datasets with few features, on which both starts always reach it. The mean difference in reach is 0.54 to 0.85, with Holm-corrected $p \leq 0.016$ in every group.
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_reach_quality}
+  \caption{Almost all of the AUF difference between the two starts comes from reach. Each pair of points is one dataset: the part of the sparse start's AUF lead due to reaching more limits (reach part) and the part due to better scores at the limits both reach (quality part). Test split, seed means, limit of ten features}
+  \label{fig:reach-quality}
+\end{figure}
+
+Splitting each dataset's AUF difference into a reach part and a quality part (Fig.~\ref{fig:reach-quality}) gives the reach part 98.1 to 99.8\% of the total in every group. The quality parts lie close to zero on almost every dataset. The two clear exceptions, below zero under the random forest, are BeetleFly and Coffee, the datasets with 8 and 11 test rows.
+
+Sizes that both starts reach occur on only 1 to 11 datasets per group with more than 50 test rows, all with at most 235 features. On these datasets, the mean difference in test F1 at matched sizes is between $-0.007$ and $+0.006$, and every 95\% interval lies within $\pm 0.02$ (Table~\ref{tab:criterion}). The check with subsets of exactly $k$ features gives the same result. At sizes both starts reach, they therefore predict about equally well. Nothing is known about quality at matched sizes on datasets with more features, because there the opposition-based start returns no subset to compare.
+
+\subsection{Reach Depends on the Number of Features}
+\label{sec:res-d}
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_reach_vs_d}
+  \caption{The opposition-based search reaches ten features on datasets with up to about 100 features and almost never beyond 500, while the sparse start always does. Each point is one dataset: the share of its five runs whose returned front holds a subset with at most ten features; points are offset slightly by configuration. The grey curve is the probability that an opposition-based initial population already holds such a subset (Eq.~\ref{eq:pair})}
+  \label{fig:reach-d}
+\end{figure}
+
+Figure~\ref{fig:reach-d} relates reach to the number of features. The initial opposition-based population holds a subset with at most ten features only on PenDigits (16 features), ItalyPowerDemand (24), and in one seed of satimage (36), as the analysis of Section~\ref{sec:access} predicts. Selection then brings the front to the limit within the budget on every dataset with at most 99 features. Between 152 and 512 features, some datasets reach the limit and others do not, and beyond 512 features none does. A logistic model puts the number of features at which half of the opposition-based runs reach the limit at 163 to 226 in the benchmark groups and at 172 in the designed experiment. For the complete NSGAII-MIIP, the same point lies at 208 to 268 features. The budgets were set per dataset and grow with the number of features, so the model cannot separate the two, and the intervals for the budget coefficient are wide. We therefore do not claim a separate effect of the budget from these runs; the pilot varies the budget directly (Section~\ref{sec:res-pilot}).
+
+The sparse start reaches the limit in all 594 of its runs. Every one of its returned fronts holds a subset with a single feature.
+
+\subsection{When the Limit Is Reached}
+\label{sec:res-time}
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_time_to_reach}
+  \caption{The sparse start holds a subset with at most ten features from its first generation, while most opposition-based runs never reach one. Kaplan--Meier curves of the share of runs whose archive holds such a subset, against the share of the fit budget spent (logarithmic). Runs within a group are pooled for display; the tests in the text are per dataset}
+  \label{fig:time}
+\end{figure}
+
+Figure~\ref{fig:time} shows when runs first reach the limit. All runs of the sparse start reach it with the initial population. Of the opposition-based runs, 12.5\%, 6.7\%, 6.5\%, and 9.0\% have reached it after 10\% of the budget, in the designed experiment and under the decision tree, random forest, and LightGBM, and 15\%, 30\%, 36\%, and 48\% by the end. The complete NSGAII-MIIP reaches it in 37\%, 46\%, and 56\% of its runs by the end. The restricted mean time to reach is shorter for the sparse start than for the opposition-based start on every dataset, by 0.72 to 0.86 of the budget on average, and shorter than for NSGAII-MIIP by 0.66 to 0.72. No run lost a small subset once its archive held one: in all 1{,}544 runs, the returned front reaches the limit exactly when the archive does.
+
+\subsection{The Cost of a Sparse Start}
+\label{sec:res-cost}
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_large_end}
+  \caption{The sparse start gives up the large subsets. (a) Per dataset, the best test F1 at any size of the sparse start minus that of the opposition-based start; bars are means. (b) The largest subset on the returned front, median over seeds and groups, with $d/2$ for reference. Test split}
+  \label{fig:cost}
+\end{figure}
+
+The sparse start does not search better in general; it searches elsewhere. Without a size limit, the best subset on its front, chosen on validation, has a lower test F1 than the best subset of the opposition-based start on most datasets (Fig.~\ref{fig:cost}a). The mean difference is $-0.007$ under the decision tree (7 wins, 23 losses; Holm $p = 0.013$), $-0.029$ under the random forest (5 wins, 29 losses; $p < 0.001$), and $-0.022$ under LightGBM (3 wins, 1 tie, 24 losses; $p < 0.001$). Against NSGAII-MIIP the difference is $-0.012$ to $-0.021$. In the designed experiment, the sparse start has the lower best score on five of the eight datasets.
+
+The reason is visible in the sizes (Fig.~\ref{fig:cost}b). The fronts of the sparse start end at no more than 36 features on any dataset, while those of the opposition-based start and of NSGAII-MIIP reach close to half of all features on the wide datasets. The median difference in the largest subset is 97, 69, and 28 features under the three classifiers. The sparse start still leads at larger limits: its AUF is higher by 0.40 to 0.48 with a limit of 20 features, and by 0.08 to 0.14 when AUF is taken over the whole front. The pilot shows that a start covering all sizes does not remove this cost (Section~\ref{sec:res-pilot}).
+
+\subsection{An Informed Improvement Phase Does Not Close the Gap}
+\label{sec:res-miip}
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_three_arms}
+  \caption{The improvement phase of NSGAII-MIIP adds little reach. Per dataset, the difference in the share of runs that reach ten features: (a) NSGAII-MIIP minus the opposition-based start, (b) the sparse start minus NSGAII-MIIP; bars are means}
+  \label{fig:miip}
+\end{figure}
+
+The complete NSGAII-MIIP starts from the same opposition-based population and adds its mutual-information improvement phase. Compared with the opposition-based start alone, its share of runs that reach the limit is higher by 0.043, 0.075, and 0.082 under the three classifiers (Holm $p = 0.125$, $0.016$, $0.062$), and its AUF by 0.058, 0.057, and 0.083 ($p = 0.005$, $0.031$, $0.029$). The sparse start is ahead of it by 0.64, 0.54, and 0.46 in reach and by 0.44, 0.39, and 0.33 in AUF (Fig.~\ref{fig:miip}). The improvement phase therefore helps slightly, but the start decides whether the front reaches small sizes.
+
+\subsection{Repeated Subsets}
+\label{sec:res-repeats}
+
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_repeats}
+  \caption{Almost all subsets proposed in sparse runs had been evaluated before. Per dataset, the median over seeds of the share of proposed subsets that were taken from the cache, against the number of features. NSGAII-MIIP is not shown, because its improvement phase evaluates subsets outside the generation count}
+  \label{fig:repeats}
+\end{figure}
+
+The sparse start spends its proposals differently (Fig.~\ref{fig:repeats}). Per dataset, the median share of proposed subsets that had already been evaluated is 0.96 to 0.99 for the sparse start and 0.10 to 0.18 for the opposition-based start. This agrees with the analysis of Section~\ref{sec:mutation}: in a population of small subsets, mutation rarely changes a child, and crossover between similar parents rarely produces a new subset. The pilot measures the first part directly (Section~\ref{sec:res-pilot}). Under the random forest and LightGBM, the stopping rule of 50 generations without a new subset ended 72 of 195 and 63 of 194 sparse runs, at a median of 8.8\% and 7.9\% of the budget, and 10 of 170 and 9 of 134 opposition-based runs, at 75\% and 59\%. Every stopped run had already reached the limit. The runs with the decision tree have no such rule, but they also differ in classifier, hardware, and code version, so the comparison between groups does not isolate the effect of the rule.
+
+\subsection{Pilot: Budget, Starts over All Sizes, and a Forced Flip}
+\label{sec:res-pilot}
+
+The pilot (Section~\ref{sec:pilot}) did not support any of its three registered claims, but each result sharpens how the main results should be read.
+
+\paragraph{The opposition-based start reaches the limit with more budget.}
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_pilot_budget}
+  \caption{With enough fits, the opposition-based start reaches ten features on every pilot dataset; the fits it needs grow with the number of features. Kaplan--Meier curves of the share of the five 10$\times$ runs whose archive holds a subset with at most ten features, against fits in multiples of the benchmark budget. The 1$\times$ and 3$\times$ runs are the same trajectories cut short. Validation split}
+  \label{fig:pilot-budget}
+\end{figure}
+The share of opposition-based runs whose front reaches ten features at 1$\times$, 3$\times$, and 10$\times$ the budget is 1.0, 1.0, and 1.0 on Adiac, 0.2, 1.0, and 1.0 on Strawberry, and 0.0, 0.0, and 1.0 on both Earthquakes and Computers (Fig.~\ref{fig:pilot-budget}). The registered expectation that reach would stay incomplete at 10$\times$ on the two widest datasets therefore fails. The archive first holds a subset with at most ten features after a median of 0.54, 1.55, 3.99, and 7.10 times the budget, which grows roughly in proportion to the number of features on these four datasets. Once it gets there, the opposition-based start scores as well as the sparse start: at 10$\times$ its AUF is 0.009 higher than that of the sparse start at 1$\times$ (higher in 12 of 20 seeds), at a median run time of 1{,}480 to 4{,}691 seconds against 216 to 907. The boundary of Section~\ref{sec:res-d} is thus a boundary of budget: at a fixed budget, AUF with a small limit measures how far the start is from the small sizes.
+
+\paragraph{Starts over all sizes keep reach but not the large subsets.}
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_pilot_starts}
+  \caption{Starts that cover all sizes do as well as the sparse start, but not better. Per dataset and seed, the uniform and log-uniform starts minus the sparse start with the same seed: (a) best test F1 at any size, (b) AUF with a limit of ten features; bars are means. Test split}
+  \label{fig:pilot-starts}
+\end{figure}
+\input{tables/pilot_fronts}
+Both starts that cover sizes 1 to $d$ reach ten features in every run. Their best test F1 at any size is at least that of the sparse start in only 7 and 8 of 20 seeds (mean differences $-0.014$ and $-0.005$), and their AUF differs from it by 0.000 and $-0.002$ on average (Fig.~\ref{fig:pilot-starts}). The reason is in the fronts (Table~\ref{tab:pilot-fronts}). Whatever the start, the population ends on a few small subsets, and the large subsets that a wide start contains at the beginning do not survive. With ten times the budget, the opposition-based start also ends on small subsets once it has reached them. The loss at the large-subset end (Section~\ref{sec:res-cost}) is therefore a property of selection, which favors small subsets once they are present, and not of the start.
+
+\paragraph{Repeats follow the $2k/d$ account, and a forced flip lowers their cost but not the quality.}
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_pilot_unchanged}
+  \caption{Balanced mutation leaves children unchanged at the rate the analysis predicts. One point per run with balanced mutation: the share of children that mutation left unchanged, against $2k/d$ at the run's median evaluated size $k$; the curve is $e^{-2k/d}$ (Section~\ref{sec:mutation})}
+  \label{fig:pilot-unchanged}
+\end{figure}
+\begin{figure}[!tbp]
+  \centering
+  \includegraphics{fig_pilot_min1}
+  \caption{A forced flip makes the small-subset searches far cheaper but not better. Per start, one point per run: (a) the share of proposed subsets that had already been evaluated, (b) proposals per new model fit (logarithmic), (c) AUF with the forced flip minus AUF with balanced mutation, same seed and initial population; bars are means}
+  \label{fig:pilot-min1}
+\end{figure}
+The share of children that balanced mutation leaves unchanged follows $e^{-2k/d}$ (Fig.~\ref{fig:pilot-unchanged}): 0.94 to 0.99 per dataset for the three starts with small subsets and 0.48 to 0.85 for the opposition-based start. The forced flip lowers the share of repeated proposals in every seed, from a median of 0.94 to 0.73 for the sparse start and from 0.94 to 0.70 for the log-uniform start, but never by half, and it leaves AUF unchanged ($-0.003$ and $0.000$; Fig.~\ref{fig:pilot-min1}). With the forced flip, a child almost never equals a member of the population (5\% of proposals, against 45\% with balanced mutation for the sparse start), yet 78\% of all proposals are still subsets that had already been evaluated. This is the second source of repeats described in Section~\ref{sec:mutation}: one change to a member of a converged population usually gives a neighbor evaluated before. What the forced flip changes is the cost. The sparse start makes 4.7 proposals per new fit instead of 176, and its median run time on the four datasets falls from 290, 216, 847, and 907 seconds to 106, 28, 52, and 54. For the opposition-based start, whose population is still wide, the forced flip removes almost all repeats and raises AUF by 0.016.
+
+The robustness of these results to runs that did not finish and to the choice of classifier is shown in Appendix~\ref{sec:appendix}.

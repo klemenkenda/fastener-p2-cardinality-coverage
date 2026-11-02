@@ -1,7 +1,7 @@
 % !TEX root = ../main.tex
 
 \begin{abstract}
-\todo{70--150 words, self-contained, no citations (ComSIS rule).}
+Evolutionary feature-selection methods are often compared at small feature limits. Such a score mixes two questions: whether a method returns any subset within the limit, and how well its subsets predict. We separate the two for three configurations of NSGA-II (an opposition-based start, a sparse start, and NSGAII-MIIP with its mutual-information improvement phase) on 46 datasets with 16 to 192{,}000 features and up to three classifiers, plus a pilot on four datasets. With a limit of ten features, 98 to 100 percent of the area-under-the-front difference between the two starts comes from limits the opposition-based start does not reach; at sizes both reach, test F1 differs by less than 0.02. At benchmark budgets, the opposition-based start never reaches ten features beyond 512 features; with ten times the budget, it does on all four pilot datasets. Such comparisons should report reach, scores at matched sizes, and the budget.
 
 \vspace{6pt}\textbf{Keywords:} evolutionary feature selection, multi-objective optimization, initialization, cardinality coverage, evaluation budget.
 \end{abstract}

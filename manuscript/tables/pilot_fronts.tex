@@ -1,0 +1,20 @@
+% !TEX root = ../main.tex
+% Values from evidence/H14-E02/tables/per_arm.csv (max_front, median over five seeds).
+\begin{table}[!tbp]
+\caption{Largest subset on the returned front in the pilot, median over five seeds. Whatever the start, the search ends on a few small subsets once it has reached them}
+\label{tab:pilot-fronts}
+\centering
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Start & Adiac & Strawberry & Earthquakes & Computers \\
+ & ($d$ = 176) & ($d$ = 235) & ($d$ = 512) & ($d$ = 720) \\
+\midrule
+Sparse start & 10 & 6 & 7 & 6 \\
+Uniform start & 11 & 8 & 13 & 8 \\
+Log-uniform start & 9 & 6 & 8 & 5 \\
+OBL start & 26 & 34 & 165 & 269 \\
+OBL start, 10$\times$ budget & 18 & 6 & 13 & 20 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -21,8 +21,10 @@
 
 \graphicspath{{figures/}}
 
-%% Drafting notes; switch to \newcommand{\todo}[1]{} before submission
+%% Drafting notes; before submission switch to \newcommand{\todo}[1]{} and
+%% \usepackage{comment} with \excludecomment{todolist}
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newenvironment{todolist}[1]{\par\color{red}\noindent\textbf{[TODO: #1]}\begin{itemize}\small}{\end{itemize}\par}
 
 \title{Cardinality Coverage in Evolutionary Feature Selection:\\
 A Budget-Aware Study of Initialization and Search Operators}
@@ -51,6 +53,8 @@ A Budget-Aware Study of Initialization and Search Operators}
 \input{sections/06-discussion}
 \input{sections/07-conclusion}
 \input{sections/08-acknowledgments}
+\input{sections/09-appendix}
+\clearpage % place all figures before the references
 
 \bibliographystyle{splncs03}
 \bibliography{references}

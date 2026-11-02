@@ -151,7 +151,13 @@
             "source_path": "experiments/reports/H13-E01/tables/q1_criterion_min_test50_exact.csv",
             "copied": true,
             "sha256": "7776d6822cdcee844005dca96f37f8a3f9487b4b67fc342143b5060a7f4d6438"
+        },
+        {
+            "source_path": "experiments/reports/H13-E01/tables/run_measures.csv",
+            "sha256": "b1d08e973d4b4a5e0e3bb5b6986c08ddf9356e65020d0532040d5ede53b59967",
+            "copied": true,
+            "commit": "354c307d2fc0fa9e8b11f75d95f4fd432ff23cf4"
         }
     ],
-    "scope": "Copied unchanged; only the tables and figures P2 cites. Per-run measures (run_measures.csv) and missing-cell lists stay in the source repository."
+    "scope": "Copied unchanged; the tables and figures P2 cites, and run_measures.csv (per-run measures, no raw data) for the paper's figures. Missing-cell lists stay in the source repository."
 }
