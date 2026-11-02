@@ -4,7 +4,7 @@
 GitHub repozitorij: [`fastener-p2-cardinality-coverage`](https://github.com/klemenkenda/fastener-p2-cardinality-coverage)  
 Delovni podnaslov: *A budget-aware study of initialization and search operators*
 
-**Odločitev (2. november 2026, Klemen Kenda):** P2 ostane samostojen članek. Ciljna revija je *Evolutionary Intelligence* (Springer), druga možnost *SN Computer Science*; ob močnem metodološkem rezultatu pilota tudi *ACM TELO*. Članek ne trdi nove inicializacije, temveč obravnava pokritost velikosti podmnožic in njen vpliv na vrednotenje. Utemeljitev izbire revije je v [publikacijskem načrtu](https://github.com/klemenkenda/fastener-experiments/blob/master/papers/PUBLICATION-PLAN.md), razdelek 4.
+**Odločitev (2. november 2026, Klemen Kenda):** P2 ostane samostojen članek. Prispevek ni raziskava na fronti področja, zato ciljamo na revije z manjšim vplivom: najprej *Journal of Universal Computer Science (J.UCS)*, nato *Computer Science and Information Systems (ComSIS)* ali *SN Computer Science*; konferenčna možnost je SiKDD na Informacijski družbi 2027. Članek ne trdi nove inicializacije, temveč obravnava pokritost velikosti podmnožic in njen vpliv na vrednotenje. Utemeljitev izbire revije je v [publikacijskem načrtu](https://github.com/klemenkenda/fastener-experiments/blob/master/papers/PUBLICATION-PLAN.md), razdelek 4.
 
 *Presoja z dne 31. oktobra 2026, ohranjena kot ozadje:* **sedanjega H1 ne razvijati neposredno v samostojen članek o novi inicializaciji.** Najbližja literatura že pokriva bistvo te ideje. Privzeta pot je vključitev H1 v metodologijo širše primerjave P3. P2 ohranimo kot pogojni raziskovalni predlog, če omejen pilot pokaže novo, posplošljivo ugotovitev o pokritosti velikosti podmnožic, operatorjih in vrednotenju.
 
