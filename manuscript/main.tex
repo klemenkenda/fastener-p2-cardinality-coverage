@@ -17,9 +17,20 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{hyperref}
+\def\UrlBreaks{\do\/\do\-\do\.}
 
 \graphicspath{{figures/}}
+
+% Let floats share pages with text and with each other more readily
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
 
 %% Drafting notes; before submission switch to \newcommand{\todo}[1]{} and
 %% \usepackage{comment} with \excludecomment{todolist}
@@ -32,7 +43,7 @@ A Budget-Aware Study of Initialization and Search Operators}
 \titlerunning{Cardinality Coverage in Evolutionary Feature Selection}
 
 %% TODO: add co-authors and mark the corresponding author
-\author{Klemen Kenda\inst{1}}
+\author{Klemen Kenda\inst{1}\thanks{Corresponding author}}
 
 %\authorrunning{Klemen Kenda et al.}
 

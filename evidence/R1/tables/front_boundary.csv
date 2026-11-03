@@ -1,0 +1,12 @@
+grid,method,runs,reached_limits_with_test_f1_zero,runs_with_q_decreasing_in_k
+H1-E02,nsga2,40,0,5
+H1-E02,nsga2_sparse,40,0,27
+H5H6-E01,nsga2,164,0,38
+H5H6-E01,nsga2_sparse,165,0,139
+H5H6-E01,nsgaii_miip,149,0,48
+H5H6-E02,nsga2,170,0,31
+H5H6-E02,nsga2_sparse,195,0,123
+H5H6-E02,nsgaii_miip,160,0,42
+H5H6-E03,nsga2,134,0,34
+H5H6-E03,nsga2_sparse,194,0,133
+H5H6-E03,nsgaii_miip,133,0,42

@@ -1,0 +1,57 @@
+{
+    "created": "2026-11-03",
+    "purpose": "Supplementary statistics for the first revision (R1), answering REVIEW-gpt-6.1-sol-pro.md",
+    "experiments_repository": "https://github.com/klemenkenda/fastener-experiments",
+    "experiments_commit": "e44fd742173b1150a8cd88819e337d3b0e2f43dc",
+    "fastener_repository": "https://github.com/klemenkenda/FASTENER",
+    "fastener_commit": "047e1fb362089c6bb930c7817431981d7dd6ca3d",
+    "inputs": [
+        "experiments/distilled_logs/{H1-E02,H5H6-E01,H5H6-E02,H5H6-E03}/*.csv.xz (via h13_report.load_grid)",
+        "evidence/H14-E02/tables/run_measures.csv",
+        "evidence/H14-E02/tables/subset_summary.csv"
+    ],
+    "command": "python evidence/R1/review_supplement.py --fx <fastener-experiments clone>",
+    "environment": "Python 3.13.2, numpy 2.4.2, pandas 3.0.3, scipy 1.18.1, scikit-learn 1.9.1",
+    "files": [
+        {
+            "path": "tables/attribution.csv",
+            "sha256": "e031bf06c96fc4ae8a8731425f4b0ca26c01b75ba24f4eb57b82eccc07c90225"
+        },
+        {
+            "path": "tables/completion.csv",
+            "sha256": "80fc8c7d305eae65a2250dbc0837d5739a6e5d0f25595d5a83e6d08d447f2245"
+        },
+        {
+            "path": "tables/d50.csv",
+            "sha256": "ca8b97582fa78b0c6ad77b598e0ac578100bc0f8f5caec8ff16465530f4df009"
+        },
+        {
+            "path": "tables/front_boundary.csv",
+            "sha256": "4904391cd29c2791ae3522f1a38b7b121d99e635cc1e02928a2a7222c811708f"
+        },
+        {
+            "path": "tables/matched_by_dataset.csv",
+            "sha256": "397846e86887a94210805d344ae23c4384a03a77347d456ab3b41d183f66e1f2"
+        },
+        {
+            "path": "tables/matched_summary.csv",
+            "sha256": "39a6c8830f5070a1ff06db7bb73c1ca68ae319a2054d2cdbc2a57914375c99c9"
+        },
+        {
+            "path": "tables/pilot_empty.csv",
+            "sha256": "e9a0db761031b738f7113fff5e4f7caaf9b6b0833a54e9f41c9003cdd9d2996e"
+        },
+        {
+            "path": "tables/pilot_first_hit.csv",
+            "sha256": "14fbf3db46e8df00202f02dc408c94fabb9d2d0c30c8e75fd7fcee065df00bf1"
+        },
+        {
+            "path": "tables/val_ties.csv",
+            "sha256": "f1b2b96088d2909eb39a94416fef6d7cf8e1765b2b3b72ed24873f23b18523dd"
+        },
+        {
+            "path": "review_supplement.py",
+            "sha256": "2ddbee9c5aa1bf112f031e04d1719b007d0e4aab1764075b2344f94e6f2ce1df"
+        }
+    ]
+}

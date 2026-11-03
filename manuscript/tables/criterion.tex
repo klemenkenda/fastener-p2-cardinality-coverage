@@ -1,21 +1,36 @@
 % !TEX root = ../main.tex
-% Generated from evidence/H13-E01/tables/q1_criterion.csv and q1_criterion_min_test50.csv.
+% Generated from evidence/H13-E01/tables/q1_criterion.csv, q1_criterion_min_test50.csv and
+% evidence/R1/tables/attribution.csv and matched_summary.csv (review_supplement.py).
 \begin{table}[!tbp]
-\caption{Sparse start against OBL start, by group of runs. Reach: share of seeds whose front holds a subset with at most ten features; datasets as units, wins/ties/losses, mean difference with 95\% bootstrap interval and Holm-corrected Wilcoxon $p$. Reach share: part of the AUF difference due to reach. Matched size: datasets with more than 50 test rows on which both starts reach at least one shared limit, mean test-F1 difference and 95\% interval}
+\caption{Sparse start against the opposition-based (OBL) start, by group of runs, with datasets as units and 95\% bootstrap intervals over datasets. (a) Reach: share of seeds whose front holds a subset with at most ten features; wins/ties/losses, mean difference, and Holm-corrected Wilcoxon $p$. $S$ and $A$: share of the AUF difference due to reach, signed and absolute (Eq.~\ref{eq:shares}), in percent. (b) Matched-size difference $m$ in test F1 (Section~\ref{sec:reach}): number of datasets with a matched limit, mean, and datasets with $|m| > 0.02$; the same without datasets with at most 50 test rows (exploratory); and the mean of the seed-paired version over all datasets}
 \label{tab:criterion}
 \centering
 \footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{17mm}rcccccl@{}}
+\setlength{\tabcolsep}{2.6pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{17mm}rcccll@{}}
+\multicolumn{7}{@{}l}{(a) Reach and its share of the AUF difference} \\
 \toprule
- & & \multicolumn{3}{c}{Reach} & Reach & \multicolumn{2}{c}{Matched size} \\
-\cmidrule(lr){3-5}\cmidrule(lr){7-8}
-Group & Data & W/T/L & Mean [95\% CI] & $p$ & share & Data & Mean [95\% CI] \\
+Group & Data & W/T/L & Mean [95\% CI] & $p$ & $S$ [95\% CI] & $A$ [95\% CI] \\
 \midrule
-Decision tree (designed) & 8 & 7/1/0 & 0.85 [0.60, 1.00] & 0.016 & 0.998 & 1 & $-$0.007 -- \\
-Decision tree & 30 & 22/8/0 & 0.68 [0.51, 0.84] & $1.8\times10^{-5}$ & 0.997 & 10 & $-$0.001 [$-$0.004, +0.002] \\
-Random forest & 34 & 24/10/0 & 0.64 [0.47, 0.78] & $1.2\times10^{-5}$ & 0.981 & 11 & +0.006 [+0.000, +0.013] \\
-LightGBM & 28 & 17/11/0 & 0.54 [0.36, 0.72] & $2.1\times10^{-4}$ & 0.992 & 11 & +0.003 [$-$0.002, +0.011] \\
+Decision tree (designed) & 8 & 7/1/0 & 0.85 [0.60, 1.00] & 0.016 & 100.1 [99.9, 100.5] & 99.8 [99.4, 100.0] \\
+Decision tree & 30 & 22/8/0 & 0.68 [0.51, 0.84] & $1.8\times10^{-5}$ & 100.0 [99.8, 100.2] & 99.7 [99.4, 99.9] \\
+Random forest & 34 & 24/10/0 & 0.64 [0.47, 0.78] & $1.2\times10^{-5}$ & 101.2 [99.5, 104.3] & 98.1 [95.2, 99.7] \\
+LightGBM & 28 & 17/11/0 & 0.54 [0.36, 0.72] & $2.1\times10^{-4}$ & 100.0 [99.3, 100.8] & 99.2 [98.3, 99.8] \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{17mm}rlcrlr@{}}
+\multicolumn{7}{@{}l}{(b) Test F1 at matched sizes, sparse minus OBL start} \\
+\toprule
+ & \multicolumn{3}{c}{All datasets (primary)} & \multicolumn{2}{c}{$>$50 test rows} & Paired \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(l){7-7}
+Group & Data & Mean [95\% CI] & $|m|{>}0.02$ & Data & Mean [95\% CI] & Mean \\
+\midrule
+Decision tree (designed) & 1 & $-$0.007 & 0 & 1 & $-$0.007 & $-$0.007 \\
+Decision tree & 10 & $-$0.001 [$-$0.004, +0.002] & 0 & 10 & $-$0.001 [$-$0.004, +0.002] & $-$0.002 \\
+Random forest & 13 & $-$0.014 [$-$0.044, +0.008] & 4 & 11 & +0.006 [+0.000, +0.013] & $-$0.015 \\
+LightGBM & 13 & +0.001 [$-$0.006, +0.008] & 2 & 11 & +0.003 [$-$0.002, +0.011] & $-$0.000 \\
 \bottomrule
 \end{tabular}
 \end{table}

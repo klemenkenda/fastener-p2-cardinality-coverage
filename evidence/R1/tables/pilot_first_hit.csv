@@ -1,0 +1,5 @@
+dataset,d,base_budget,median_first_hit_fits,min_first_hit_fits,max_first_hit_fits,fits_per_feature,budgets_to_reach
+Adiac,176,12000,6534,6128,8452,37.125,0.5445
+Strawberry,235,6000,9292,5472,16662,39.5404,1.54867
+Earthquakes,512,12000,47830,46324,60611,93.418,3.98583
+Computers,720,12000,85239,74518,87064,118.388,7.10325

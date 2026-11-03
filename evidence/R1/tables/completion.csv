@@ -1,0 +1,12 @@
+grid,method,finished,planned,share
+H1-E02,nsga2,40,40,1
+H1-E02,nsga2_sparse,40,40,1
+H5H6-E01,nsga2,164,195,0.841026
+H5H6-E01,nsga2_sparse,165,195,0.846154
+H5H6-E01,nsgaii_miip,149,195,0.764103
+H5H6-E02,nsga2,170,195,0.871795
+H5H6-E02,nsga2_sparse,195,195,1
+H5H6-E02,nsgaii_miip,160,195,0.820513
+H5H6-E03,nsga2,134,195,0.687179
+H5H6-E03,nsga2_sparse,194,195,0.994872
+H5H6-E03,nsgaii_miip,133,195,0.682051
