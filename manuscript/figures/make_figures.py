@@ -16,7 +16,7 @@ matplotlib.use("pdf")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
+from matplotlib.ticker import FuncFormatter, LogLocator, MaxNLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 TABLES = ROOT / "evidence" / "H13-E01" / "tables"
@@ -36,6 +36,8 @@ STYLE = {
 MARK = dict(ls="none", marker="o", ms=3.6, mec="white", mew=0.5)
 
 # Colour is reserved for configurations and is the same in every figure (FIGURE-STYLE.md).
+# Sparse start and NSGAII-MIIP have the same lightness, so a line of NSGAII-MIIP is dashed.
+LINESTYLE = {"nsgaii_miip": (0, (4, 1.6))}
 CONFIG = {
     "nsga2": dict(label="OBL start", color="#285fa8"),
     "nsga2_sparse": dict(label="Sparse start", color="#e07434"),
@@ -68,7 +70,10 @@ GRIDS = {
 }
 BENCH = ["H5H6-E01", "H5H6-E02", "H5H6-E03"]
 # Tick labels for the four groups of runs, in GRIDS order, when the groups run along x.
-GROUP_TICKS = ["Decision\ntree\n(designed)", "Decision\ntree", "Random\nforest", "LightGBM"]
+GROUP_TICKS = ["Tree\n(designed)", "Tree", "Forest", "LightGBM"]
+BENCH_TICKS = ["Decision\ntree", "Random\nforest", "LightGBM"]
+# Annotations and direct labels: the tick size, never smaller.
+ANNOT = 9
 # One-line names, when the groups run down the y axis.
 GROUP_NAMES = list(GRIDS.values())
 
@@ -78,12 +83,13 @@ def setup() -> None:
         "font.family": "serif",
         "font.serif": ["STIXGeneral", "Times New Roman"],
         "mathtext.fontset": "stix",
-        "font.size": 8,
-        "axes.titlesize": 8,
-        "axes.labelsize": 8,
-        "legend.fontsize": 8,
-        "xtick.labelsize": 7,
-        "ytick.labelsize": 7,
+        "font.size": 10,
+        "axes.titlesize": 10,
+        "axes.labelsize": 10,
+        "legend.fontsize": 10,
+        "figure.labelsize": 10,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
         "axes.edgecolor": STYLE["secondary"],
         "axes.linewidth": 0.6,
         "axes.titlepad": 4,
@@ -125,6 +131,8 @@ def setup() -> None:
 def plain_number(x: float, _pos=None) -> str:
     if x <= 0:
         return ""
+    if x >= 1000:
+        return f"{x / 1000:,.0f}k"
     if x >= 1:
         return f"{x:,.0f}"
     return f"{x:g}"
@@ -153,19 +161,21 @@ def mean_bar(ax, centre, value, half=0.28, axis="x") -> None:
     ax.plot(xs, ys, color=STYLE["ink"], lw=1.4, solid_capstyle="butt", zorder=4)
 
 
-def legend_above(fig, entries, kind: str = "dot") -> None:
+def legend_above(fig, entries, kind: str = "dot", ncol=None) -> None:
     """One legend above the panels; `entries` are configuration keys or (label, colour) pairs."""
     pairs = [(CONFIG[e]["label"], CONFIG[e]["color"]) if isinstance(e, str) else e
              for e in entries]
     if kind == "line":
-        handles = [plt.Line2D([], [], color=c, lw=1.6, label=lab) for lab, c in pairs]
-        length = 1.8
+        styles = [LINESTYLE.get(e, "-") if isinstance(e, str) else "-" for e in entries]
+        handles = [plt.Line2D([], [], color=c, lw=1.6, ls=st, label=lab)
+                   for (lab, c), st in zip(pairs, styles)]
+        length = 2.4
     else:
         handles = [plt.Line2D([], [], color=c, label=lab, **{**MARK, "ms": 4.6})
                    for lab, c in pairs]
         length = 0.8
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0),
-               ncol=len(handles), handlelength=length)
+               ncol=ncol or len(handles), handlelength=length)
 
 
 def group_ticks(ax, labels, axis: str = "x") -> None:
@@ -183,6 +193,12 @@ def grid_panels(nrows=2, ncols=2, height=80, sharey=True):
     fig, axes = plt.subplots(nrows, ncols, figsize=(FULL_WIDTH, height * MM),
                              sharex=True, sharey=sharey, constrained_layout=True)
     return fig, axes.ravel()
+
+
+def grid_labels(fig, xlabel: str, ylabel: str) -> None:
+    """Shared axis labels for a grid of panels, once for the whole figure."""
+    fig.supxlabel(xlabel, color=STYLE["ink"])
+    fig.supylabel(ylabel, color=STYLE["ink"])
 
 
 def save(fig, name: str) -> None:
@@ -237,7 +253,7 @@ def offset(method: str, step: float) -> float:
 # ----------------------------------------------------------------- figures
 def fig_reach_quality() -> None:
     t = pd.read_csv(TABLES / "q1_terms.csv")
-    fig, axes = grid_panels(height=78)
+    fig, axes = grid_panels(height=72)
     parts = [("reach_term", "Reach part", NEUTRAL["dark"]),
              ("quality_term", "Quality part", NEUTRAL["light"])]
     for ax, (g, title) in zip(axes, GRIDS.items()):
@@ -248,17 +264,14 @@ def fig_reach_quality() -> None:
         log_axis(ax)
         ax.set_title(title)
         ax.set_ylim(-0.25, 1.05)
-    for ax in axes[2:]:
-        ax.set_xlabel("Features $d$")
-    for ax in axes[::2]:
-        ax.set_ylabel("AUF difference,\nsparse minus OBL start")
+    grid_labels(fig, "Features $d$", "AUF difference, sparse minus OBL start")
     legend_above(fig, [(lab, c) for _, lab, c in parts])
     save(fig, "fig_reach_quality")
 
 
 def fig_reach_vs_d() -> None:
     q = pd.read_csv(TABLES / "q2_reach_by_dataset.csv")
-    fig, axes = grid_panels(height=78)
+    fig, axes = grid_panels(height=72)
     dd = np.unique(np.round(np.logspace(np.log10(10), np.log10(250_000), 400)).astype(int))
     analytic = np.array([obl_start_reach(int(x)) if x <= 400 else 0.0 for x in dd])
     for ax, (g, title) in zip(axes, GRIDS.items()):
@@ -271,19 +284,16 @@ def fig_reach_vs_d() -> None:
         ax.set_title(title)
         ax.set_ylim(-0.08, 1.08)
     axes[0].annotate("OBL start at\ninitialization", xy=(40, 0.2), xytext=(70, 0.45),
-                     color=STYLE["secondary"], fontsize=7,
+                     color=STYLE["secondary"], fontsize=ANNOT,
                      arrowprops=dict(arrowstyle="-", color=STYLE["muted"], lw=0.6))
-    for ax in axes[2:]:
-        ax.set_xlabel("Features $d$")
-    for ax in axes[::2]:
-        ax.set_ylabel("Share of runs that\nreach ten features")
+    grid_labels(fig, "Features $d$", "Share of runs that reach ten features")
     legend_above(fig, CONFIG)
     save(fig, "fig_reach_vs_d")
 
 
 def fig_time_to_reach() -> None:
     r = runs()
-    fig, axes = grid_panels(height=78)
+    fig, axes = grid_panels(height=72)
     for ax, (g, title) in zip(axes, GRIDS.items()):
         for m in CONFIG:
             s = r[(r.grid == g) & (r.method == m)]
@@ -292,15 +302,13 @@ def fig_time_to_reach() -> None:
             x, y = kaplan_meier(s.ttr_share, s.ttr_reached)
             x = np.concatenate([[0.005], x, [1.0]])
             y = np.concatenate([[0.0], y, [y[-1] if len(y) else 0.0]])
-            ax.step(x, y, where="post", color=CONFIG[m]["color"], zorder=3)
+            ax.step(x, y, where="post", color=CONFIG[m]["color"], zorder=3,
+                    ls=LINESTYLE.get(m, "-"))
         log_axis(ax)
         ax.set_xlim(0.005, 1.0)
         ax.set_ylim(-0.03, 1.03)
         ax.set_title(title)
-    for ax in axes[2:]:
-        ax.set_xlabel("Share of the fit budget spent")
-    for ax in axes[::2]:
-        ax.set_ylabel("Share of runs that\nhave reached ten features")
+    grid_labels(fig, "Share of the fit budget spent", "Share of runs that have reached ten features")
     legend_above(fig, CONFIG, kind="line")
     save(fig, "fig_time_to_reach")
 
@@ -308,7 +316,7 @@ def fig_time_to_reach() -> None:
 def fig_large_end() -> None:
     m = seed_means(runs())
     fig, (a, b) = plt.subplots(1, 2, figsize=(FULL_WIDTH, 62 * MM), constrained_layout=True,
-                               gridspec_kw=dict(width_ratios=[1, 1.15]))
+                               gridspec_kw=dict(width_ratios=[1.3, 1]))
     rng = np.random.default_rng(20200)
     baseline(a)
     for i, g in enumerate(GRIDS):
@@ -324,7 +332,7 @@ def fig_large_end() -> None:
               .reset_index())
     dd = np.logspace(1, np.log10(250_000), 50)
     b.plot(dd, dd / 2, color=STYLE["muted"], lw=0.8, zorder=2)
-    b.text(3_000, 3_000 / 2 * 2.2, "$d/2$", color=STYLE["secondary"], fontsize=7)
+    b.text(2_000, 2_000 / 2 * 2.6, "$d/2$", color=STYLE["secondary"], fontsize=ANNOT)
     for meth, c in CONFIG.items():
         s = pooled[pooled.method == meth]
         dots(b, s.d, s.max_front, c["color"])
@@ -342,8 +350,8 @@ def fig_three_arms() -> None:
     fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 58 * MM), sharey=True,
                              constrained_layout=True)
     rng = np.random.default_rng(20200)
-    pairs = [("nsgaii_miip", "nsga2", "(a) NSGAII-MIIP minus OBL start"),
-             ("nsga2_sparse", "nsgaii_miip", "(b) Sparse start minus NSGAII-MIIP")]
+    pairs = [("nsgaii_miip", "nsga2", "(a) NSGAII-MIIP minus OBL"),
+             ("nsga2_sparse", "nsgaii_miip", "(b) Sparse minus NSGAII-MIIP")]
     for ax, (ma, mb, title) in zip(axes, pairs):
         baseline(ax)
         for i, g in enumerate(BENCH):
@@ -351,7 +359,7 @@ def fig_three_arms() -> None:
             diff = (p[ma] - p[mb]).dropna()
             dots(ax, i + rng.uniform(-0.2, 0.2, len(diff)), diff, CONFIG[ma]["color"])
             mean_bar(ax, i, diff.mean(), half=0.3)
-        group_ticks(ax, ["Decision tree", "Random forest", "LightGBM"])
+        group_ticks(ax, BENCH_TICKS)
         ax.set_title(title)
     axes[0].set_ylabel("Difference in the share of\nruns that reach ten features")
     save(fig, "fig_three_arms")
@@ -359,7 +367,7 @@ def fig_three_arms() -> None:
 
 def fig_repeats() -> None:
     q = pd.read_csv(TABLES / "q8_by_dataset.csv")
-    fig, axes = grid_panels(height=74)
+    fig, axes = grid_panels(height=70)
     for ax, (g, title) in zip(axes, GRIDS.items()):
         for meth in ["nsga2", "nsga2_sparse"]:
             s = q[(q.grid == g) & (q.method == meth)]
@@ -367,10 +375,7 @@ def fig_repeats() -> None:
         log_axis(ax)
         ax.set_ylim(-0.03, 1.03)
         ax.set_title(title)
-    for ax in axes[2:]:
-        ax.set_xlabel("Features $d$")
-    for ax in axes[::2]:
-        ax.set_ylabel("Share of proposed subsets\nalready evaluated")
+    grid_labels(fig, "Features $d$", "Share of proposed subsets already evaluated")
     legend_above(fig, ["nsga2", "nsga2_sparse"])
     save(fig, "fig_repeats")
 
@@ -383,24 +388,26 @@ def fig_missing() -> None:
                 "S1": ("Complete datasets", NEUTRAL["dark"]),
                 "S2": ("Missing as no reach", NEUTRAL["mid"]),
                 "S3": ("Shared datasets", NEUTRAL["light"])}
-    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 52 * MM), sharey=True,
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 48 * MM), sharey=True,
                              constrained_layout=True)
     rows = list(reversed(GRIDS))  # designed experiment at the top
     for ax, part, col, title in [(axes[0], "a", "mean_delta", "(a) Difference in reach"),
-                                 (axes[1], "c", "share", "(b) Reach part of the AUF difference")]:
+                                 (axes[1], "c", "share", "(b) Absolute reach share $A$")]:
         for j, (v, (lab, c)) in enumerate(variants.items()):
             s = q[(q.variant == v) & (q.part == part)].set_index("grid")
             xs = [s.loc[g, col] if g in s.index else np.nan for g in rows]
             ys = np.arange(len(rows)) + (1.5 - j) * 0.16
             dots(ax, xs, ys, c, label=lab)
-        group_ticks(ax, [GRIDS[g] for g in rows], axis="y")
+        group_ticks(ax, [GRIDS[g].replace(" (", "\n(") for g in rows], axis="y")
         ax.set_title(title)
     axes[0].set_xlim(0, 1)
+    axes[0].set_xticks([0, 0.25, 0.5, 0.75, 1])
+    axes[1].set_xticks([0.90, 0.95, 1.00])
     axes[0].set_xlabel("Mean over datasets")
     axes[1].set_xlim(0.9, 1.005)
     axes[1].set_xlabel("Share")
     axes[0].set_ylim(-0.5, len(rows) - 0.5)
-    legend_above(fig, list(variants.values()))
+    legend_above(fig, list(variants.values()), ncol=2)
     save(fig, "fig_missing")
 
 
@@ -414,7 +421,7 @@ def fig_classifier() -> None:
     p["lead"] = p["nsga2_sparse"] - p["nsga2"]
     lead = p.pivot(index="dataset", columns="grid", values="lead").dropna()
     own = p.pivot(index="dataset", columns="grid", values="nsga2_sparse").loc[lead.index]
-    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 64 * MM), constrained_layout=True)
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 60 * MM), constrained_layout=True)
     others = [("H5H6-E02", "Random forest", NEUTRAL["dark"]),
               ("H5H6-E03", "LightGBM", NEUTRAL["light"])]
     panels = [(axes[0], lead, (-0.05, 1.05), "(a) AUF lead of the sparse start",
@@ -431,10 +438,10 @@ def fig_classifier() -> None:
         ax.set_title(title)
         ax.set_xlabel(xl)
         ax.set_ylabel(yl)
-    axes[0].text(0.30, 0.25, "same as under the tree", color=STYLE["secondary"], fontsize=7,
+    axes[0].text(0.30, 0.25, "same as under the tree", color=STYLE["secondary"], fontsize=ANNOT,
                  rotation=45, rotation_mode="anchor", ha="left", va="top")
-    axes[1].text(0.22, 0.95, "above the line:\nhigher than under the tree", color=STYLE["secondary"],
-                 fontsize=7, ha="left", va="top")
+    axes[1].text(0.20, 0.99, "above the line:\nhigher than\nunder the tree", color=STYLE["secondary"],
+                 fontsize=ANNOT, ha="left", va="top")
     legend_above(fig, [(lab, c) for _, lab, c in others])
     save(fig, "fig_classifier")
     print(f"  common datasets: {len(lead)}")
@@ -454,7 +461,7 @@ def fig_pilot_budget() -> None:
     """When the OBL start reaches ten features, in multiples of the benchmark budget."""
     r = pilot_runs()
     s10 = r[r.method == "p2_obl_b10"]
-    fig, axes = grid_panels(height=74)
+    fig, axes = grid_panels(height=66)
     c = CONFIG["nsga2"]
     for ax, ds in zip(axes, PILOT_DATASETS):
         s = s10[s10.dataset == ds]
@@ -463,16 +470,14 @@ def fig_pilot_budget() -> None:
         y = np.concatenate([[0.0], y, [y[-1] if len(y) else 0.0]])
         for b, lab in [(1, "1×"), (3, "3×")]:
             ax.axvline(b, color=STYLE["muted"], lw=0.6, zorder=2)
-            ax.text(b * 1.08, 0.04, lab, color=STYLE["secondary"], fontsize=7)
+            if ds == PILOT_DATASETS[0]:  # label the budgets once, where no curve crosses
+                ax.text(b * 1.08, 0.45, lab, color=STYLE["secondary"], fontsize=ANNOT)
         ax.step(x, y, where="post", color=c["color"], zorder=3)
         log_axis(ax)
         ax.set_xlim(0.005, 10)
         ax.set_ylim(-0.03, 1.03)
         pilot_title(ax, r, ds)
-    for ax in axes[2:]:
-        ax.set_xlabel("Fits, in multiples of the benchmark budget")
-    for ax in axes[::2]:
-        ax.set_ylabel("Share of OBL runs that\nhave reached ten features")
+    grid_labels(fig, "Fits, in multiples of the benchmark budget", "Share of OBL runs that have reached ten features")
     save(fig, "fig_pilot_budget")
 
 
@@ -482,7 +487,7 @@ def fig_pilot_starts() -> None:
     d = r.reset_index().groupby("dataset").d.first()
     fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 58 * MM), sharey=True,
                              constrained_layout=True)
-    measures = [("best_f1", "(a) Best test F1 at any size"), ("auf_k10", "(b) AUF, limit of ten")]
+    measures = [("best_f1", "(a) Best test F1, any size"), ("auf_k10", "(b) AUF, limit of ten")]
     rows = list(reversed(PILOT_DATASETS))  # widest dataset at the bottom
     starts = ["p2_uniform", "p2_loguniform"]
     for ax, (col, title) in zip(axes, measures):
@@ -493,9 +498,10 @@ def fig_pilot_starts() -> None:
                 yc = i + (0.5 - j) * 0.3
                 dots(ax, diff, yc + np.linspace(-0.06, 0.06, len(diff)), PILOT_START[m]["color"])
                 mean_bar(ax, yc, diff.mean(), half=0.11, axis="y")
-        group_ticks(ax, [f"{ds} ($d$ = {d[ds]})" for ds in rows], axis="y")
+        group_ticks(ax, [f"{ds}\n($d$ = {d[ds]})" for ds in rows], axis="y")
+        ax.xaxis.set_major_locator(MaxNLocator(4))
         ax.set_title(title)
-        ax.set_xlabel("Difference from the sparse start")
+        ax.set_xlabel("Minus the sparse start")
     legend_above(fig, [(PILOT_START[m]["label"], PILOT_START[m]["color"]) for m in starts])
     save(fig, "fig_pilot_starts")
 
@@ -503,7 +509,7 @@ def fig_pilot_starts() -> None:
 def fig_pilot_unchanged() -> None:
     """Children left unchanged by balanced mutation against 2k/d, with exp(-2k/d)."""
     s = pd.read_csv(PILOT / "subset_summary.csv")
-    fig, axes = grid_panels(height=74)
+    fig, axes = grid_panels(height=66)
     xx = np.logspace(-3, 0.2, 100)
     for ax, (m, st) in zip(axes, PILOT_START.items()):
         q = s[s.method == m]
@@ -513,11 +519,8 @@ def fig_pilot_unchanged() -> None:
         ax.set_xlim(0.004, 1.5)
         ax.set_ylim(0.3, 1.03)
         ax.set_title(st["label"])
-    axes[0].text(0.012, 0.86, "$e^{-2k/d}$", color=STYLE["secondary"], fontsize=8)
-    for ax in axes[2:]:
-        ax.set_xlabel("Expected changed features $2k/d$")
-    for ax in axes[::2]:
-        ax.set_ylabel("Share of children left\nunchanged by mutation")
+    axes[0].text(0.012, 0.86, "$e^{-2k/d}$", color=STYLE["secondary"], fontsize=ANNOT)
+    grid_labels(fig, "Expected changed features $2k/d$", "Share of children left unchanged by mutation")
     save(fig, "fig_pilot_unchanged")
 
 
@@ -529,7 +532,7 @@ def fig_pilot_min1() -> None:
     r = pilot_runs().set_index(["method", "dataset", "seed"]).sort_index()
     rows = list(reversed(PILOT_START))  # OBL start at the top
     # Narrower than FULL_WIDTH: the tight bounding box adds the start labels on the left.
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH - 3 * MM, 52 * MM), sharey=True,
+    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 56 * MM), sharey=True,
                              constrained_layout=True)
     small = dict(ms=3.0, mew=0.4)
     for ax, col in [(axes[0], "repeat_share"), (axes[1], "per_fit")]:
@@ -546,11 +549,11 @@ def fig_pilot_min1() -> None:
         mean_bar(axes[2], i, diff.mean(), half=0.22, axis="y")
     log_axis(axes[1], "x")
     axes[0].set_xlim(-0.03, 1.03)
-    for ax, title, xl in zip(axes, ["(a) Repeated proposals", "(b) Proposals per new fit",
-                                    "(c) AUF, forced minus balanced"],
-                             ["Share already evaluated", "Proposals per new fit",
-                              "Difference (same seed)"]):
-        group_ticks(ax, [PILOT_START[m]["label"] for m in rows], axis="y")
+    axes[2].xaxis.set_major_locator(MaxNLocator(3))
+    for ax, title, xl in zip(axes, ["(a) Repeats", "(b) Cost", "(c) AUF change"],
+                             ["Share of proposals\nalready evaluated", "Proposals per\nnew fit",
+                              "Forced minus\nbalanced, same seed"]):
+        group_ticks(ax, [PILOT_START[m]["label"].replace(" start", "") for m in rows], axis="y")
         ax.set_title(title)
         ax.set_xlabel(xl)
     legend_above(fig, [(mu["label"], mu["color"]) for mu in MUTATION.values()])

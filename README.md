@@ -47,7 +47,8 @@ Prevajanje v VS Code, podobno Overleafu: razširitev LaTeX Workshop (priporočen
 - [manuscript/](manuscript/): rokopis za ComSIS; [template/comsis/](template/comsis/): izvirna predloga revije.
 - [manuscript/supplement/](manuscript/supplement/): dodatno gradivo (velikosti učinkov, rezultati po zbirkah); tabele ustvari `make_tables.py` iz `evidence/`.
 - [evidence/R1/](evidence/R1/): dodatne statistike prve revizije (`review_supplement.py`, tabele in [manifest](evidence/R1/PROVENANCE.json)), izračunane iz destiliranih dnevnikov `fastener-experiments`.
-- [internal-reviews/](internal-reviews/): notranje recenzije in [odziv na recenzijo GPT-6.1](internal-reviews/REVIEW-gpt-6.1-sol-pro.fix.md).
+- [REPRODUCE.md](REPRODUCE.md): vstopna točka za reprodukcijo (commiti, delitve, okolje, ukazi).
+- [internal-reviews/](internal-reviews/): notranje recenzije in [odziv na recenzijo GPT-6.1](internal-reviews/REVIEW-gpt-6.1-sol-pro.fix.md) in [odziv na drugi krog](internal-reviews/REVIEW-round-2-2026-11-03.fix.md).
 - [evidence/H1_auf10_per_seed.csv](evidence/H1_auf10_per_seed.csv): nespremenjen posnetek izvorne tabele; [manifest](evidence/PROVENANCE.json) vsebuje izvor in SHA-256.
 
 Predlog ne registrira novega eksperimenta. Izvorna koda, surovi podatki in celotni dnevniki tekov ostajajo v eksperimentalnem projektu FASTENER; ta začetni repozitorij še ni paket za popolno reprodukcijo. Bibliografija povezuje izvirnike, njihovih PDF-jev ne vključuje.

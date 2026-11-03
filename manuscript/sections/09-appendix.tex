@@ -13,11 +13,4 @@
   \label{fig:missing}
 \end{figure}
 
-\paragraph{The classifier.} On the 26 datasets on which both starts have runs under all three classifiers, the AUF lead of the sparse start is 0.465 under the decision tree, 0.462 under the random forest, and 0.448 under LightGBM (Fig.~\ref{fig:classifier}). The Friedman test gives $p = 0.007$, but only the difference between the tree and the forest remains after Holm correction ($+0.003$, $p = 0.022$), and the absolute reach share $A$ is 99.7\%, 99.4\%, and 99.5\%. The share of opposition-based runs that reach ten features on its 27 common datasets is 0.36, 0.42, and 0.44 (Friedman $p = 0.082$). The classifier changes the scores more than the comparison: the sparse start's own AUF is 0.04 lower under the tree than under the other two (Holm $p < 0.001$).
-
-\begin{figure}[!htbp]
-  \centering
-  \includegraphics{fig_classifier}
-  \caption{The classifier changes the scores but hardly the comparison. Each point is one of 26 datasets, under the random forest or LightGBM against the decision tree. (a) The AUF lead of the sparse start over the opposition-based start stays close to the diagonal. (b) The sparse start's own AUF lies above it: both other classifiers score higher than the tree}
-  \label{fig:classifier}
-\end{figure}
+\paragraph{The classifier.} On the 26 datasets on which both starts have runs under all three classifiers, the AUF lead of the sparse start is 0.465 under the decision tree, 0.462 under the random forest, and 0.448 under LightGBM (Supplementary Fig.~S1). The Friedman test gives $p = 0.007$, but only the difference between the tree and the forest remains after Holm correction ($+0.003$, $p = 0.022$), and the absolute reach share $A$ is 99.7\%, 99.4\%, and 99.5\%. The share of opposition-based runs that reach ten features on its 27 common datasets is 0.36, 0.42, and 0.44 (Friedman $p = 0.082$). The classifier changes the scores more than the comparison: the sparse start's own AUF is 0.04 lower under the tree than under the other two (Holm $p < 0.001$).

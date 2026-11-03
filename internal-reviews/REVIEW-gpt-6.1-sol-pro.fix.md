@@ -12,7 +12,7 @@ The script recomputes every new number from the distilled run logs of `fastener-
 
 | Review point | Status | Where |
 |---|---|---|
-| M1 Headline attribution percentage | **Fixed** | §3.3 Eq. (2)–(3); §5.1; Table 3a; abstract; introduction; Table 1; conclusion; Supplementary Table S2 |
+| M1 Headline attribution percentage | **Fixed** in the methods and Table 3; the summary wording was completed in round 2 | §3.3 Eq. (2)–(3); §5.1; Table 3a; abstract; introduction; Table 1; conclusion; Supplementary Table S2 |
 | M2 Matched-size equivalence is post hoc and overstated | **Fixed** (confirmation on new data is still open) | §4.3; §5.1; Table 3b; abstract; introduction; Table 1; discussion; conclusion; Supplementary Table S3 |
 | M3 Definitions and boundary cases | **Fixed** | §3.1, §3.2, §3.3, §3.4, §3.5; Algorithm 1 (§4.2) |
 | M4 Pilot causal and scaling wording | **Fixed** | §5.7; Fig. 9 caption; discussion; conclusion; Table 1; Supplementary Table S6 |
@@ -74,7 +74,7 @@ What changed:
   - Adiac, +0.036 (LightGBM).
 
   Supplementary Table S3 lists every dataset.
-- A **seed-paired version** was added (defined in §3.3; reported in Table 3b and Supplementary Table S3). It agrees with the conditional means within 0.001.
+- A **seed-paired version** was added (defined in §3.3; reported in Table 3b and Supplementary Table S3). It agrees closely with the conditional means (corrected in round 2: within 0.0011 in the primary analysis and 0.0013 in the exploratory one, not 0.001).
 - The designed group has one matched dataset (satimage). The paper now states explicitly that no conclusion follows from it, and that a group with one dataset has no interval.
 - Abstract and conclusion now read: "mean test F1 differences stay within 0.02 under two classifiers, and under the third only without the smallest test sets."
 - The retained feature from the review (datasets, not seeds, as units) is unchanged.

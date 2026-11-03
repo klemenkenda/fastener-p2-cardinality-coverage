@@ -1,6 +1,6 @@
 # Figure style guide
 
-Rules for every figure in the P2 manuscript (ComSIS). The figures are made by [`figures/make_figures.py`](figures/make_figures.py) from the tables in [`../evidence/`](../evidence/); the script holds every value below in one place (`STYLE`, `MARK`, `CONFIG`, `NEUTRAL`, `PILOT_START`, `GRIDS`). Change a rule there and here together.
+Rules for every figure in the P2 manuscript (ComSIS). The figures are made by [`figures/make_figures.py`](figures/make_figures.py) from the tables in [`../evidence/`](../evidence/); the script holds every value below in one place (`STYLE`, `MARK`, `CONFIG`, `LINESTYLE`, `NEUTRAL`, `PILOT_START`, `GRIDS`, `ANNOT`). Change a rule there and here together.
 
 ## Purpose
 
@@ -16,9 +16,10 @@ A figure shows one finding that the text states. The finding goes in the caption
 ## Type
 
 - **Typeface:** STIX (a Times design, matching the ComSIS body text), with STIX mathematics.
-- **Sizes:** 8 pt for axis labels, panel titles and legends; 7 pt for tick labels. Nothing smaller than 7 pt.
+- **Sizes:** 10 pt for axis labels, panel titles and legends, as the ComSIS instructions ask (lettering about 2 mm high, 10-point type); 9 pt for tick labels and annotations. Nothing smaller than 9 pt.
+- **Fitting the text:** a larger size is made to fit by layout, not by shrinking: one shared axis label per grid of panels (`grid_labels`), short or two-line category names with the full names in the caption, fewer ticks, and a legend in two rows when one row is wider than the text block.
 - **Case:** sentence case for axis labels and panel titles ("Share of runs that reach ten features"). Units in parentheses.
-- **Numbers:** plain numbers on log axes (10, 100, 1,000, 10,000), with thousands separators. No scientific notation unless the range demands it.
+- **Numbers:** plain numbers on log axes, with thousands written as k (10, 100, 1k, 10k, 100k), so that four decades fit a half-width panel. No scientific notation unless the range demands it.
 
 ## Names
 
@@ -55,7 +56,8 @@ One mark and few hues. Colour is reserved for configurations and is the same in 
 
 - **One marker shape.** Every point is a filled circle, 3.6 pt, with a 0.5 pt white edge. Shape never encodes anything; colour (and, for neutrals, lightness) does.
 - **Checked for colour vision.** The three main colours pass all-pairs checks on white (CIEDE2000 under Machado full-severity simulation: worst CVD ΔE 18.8, worst normal-vision ΔE 35.8), and each has at least 3:1 contrast on white. Plum and ochre pass as a pair (worst CVD ΔE 22.2). No five hues pass together, so the uniform and log-uniform starts never share a panel with the OBL, sparse or NSGAII-MIIP configurations; a figure showing all four starts uses one titled panel per start.
-- **All figures are in colour.** The paper is read in colour; no greyscale version is made. Lines are solid for every configuration.
+- **All figures are in colour.** The paper is read in colour; no greyscale version is made.
+- **Lightness as a second cue.** In CIELAB, OBL blue has L* 40, sparse orange 60 and NSGAII-MIIP teal 59. Sparse and NSGAII-MIIP thus differ only in hue. Where they share a panel, another cue separates them: points are offset by configuration, and the NSGAII-MIIP line is dashed (`LINESTYLE`). All other lines are solid. Plum (L* 44) and ochre (L* 60) differ in lightness.
 - **Differences take the colour of the first configuration.** A difference "a minus b" drawn as a single series is in the colour of a: sparse minus OBL in orange, NSGAII-MIIP minus OBL in teal.
 - **Non-configuration classes are neutral.** When a figure separates classes that are not configurations (the reach and quality parts of a difference, variants of an analysis, classifiers, mutation operators), they are drawn in neutral tones that differ in lightness, so they survive any colour-vision deficiency:
 
@@ -81,7 +83,7 @@ One mark and few hues. Colour is reserved for configurations and is the same in 
 | Zero or baseline | `#5a606b`, 0.6 pt, solid |
 
 - Data lines 1.2 pt. Markers 3.6 pt filled circles with a 0.5 pt white edge (3.0 pt in dense three-panel strips).
-- Categorical axes (groups of runs, starts, datasets) have no tick marks and no grid along the category; when the names are long, the categories run down the y axis with one-line labels.
+- Categorical axes (groups of runs, starts, datasets) have no tick marks and no grid along the category; when the names are long, the categories run down the y axis, with labels of at most two lines.
 - Reference curves (analytic predictions) are muted grey, 0.8 pt, and labelled directly on the curve.
 - No dashed grid lines, no frames around legends, no shadows, no 3-D.
 - Overlapping points are offset slightly by configuration, not drawn with transparency alone.
@@ -104,7 +106,7 @@ Written in LaTeX, not in the figure. First sentence: the finding. Then what each
 
 ## Checklist before including a figure
 
-1. Width at most 125 mm and fonts at least 7 pt at natural size.
+1. Width at most 125 mm and fonts at least 9 pt (10 pt for labels, titles and legends) at natural size.
 2. Only the paper's names; no experiment identifiers, file names or p-values.
 3. Configuration colours as in the table above, circles only, other classes in neutral tones; differences in the colour of the first configuration.
 4. Legend present for two or more configurations.
