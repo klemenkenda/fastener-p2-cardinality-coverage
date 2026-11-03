@@ -1,6 +1,6 @@
 # Figure style guide
 
-Rules for every figure in the P2 manuscript (ComSIS). The figures are made by [`figures/make_figures.py`](figures/make_figures.py) from the tables in [`../evidence/`](../evidence/); the script holds every value below in one place (`STYLE`, `MARK`, `CONFIG`, `LINESTYLE`, `NEUTRAL`, `PILOT_START`, `GRIDS`, `ANNOT`). Change a rule there and here together.
+Rules for every figure in the P2 manuscript (ComSIS). The figures are made by [`figures/make_figures.py`](figures/make_figures.py) from the tables in [`../evidence/`](../evidence/); the script holds every value below in one place (`STYLE`, `MARK`, `CONFIG`, `NEUTRAL`, `NEUTRAL_ALPHA`, `PILOT_START`, `GRIDS`, `ANNOT`). Change a rule there and here together.
 
 ## Purpose
 
@@ -16,8 +16,9 @@ A figure shows one finding that the text states. The finding goes in the caption
 ## Type
 
 - **Typeface:** STIX (a Times design, matching the ComSIS body text), with STIX mathematics.
-- **Sizes:** 10 pt for axis labels, panel titles and legends, as the ComSIS instructions ask (lettering about 2 mm high, 10-point type); 9 pt for tick labels and annotations. Nothing smaller than 9 pt.
-- **Fitting the text:** a larger size is made to fit by layout, not by shrinking: one shared axis label per grid of panels (`grid_labels`), short or two-line category names with the full names in the caption, fewer ticks, and a legend in two rows when one row is wider than the text block.
+- **Sizes:** 10 pt for axis labels and panel titles, as the ComSIS instructions ask (lettering about 2 mm high, 10-point type); 9 pt for tick labels, legends and annotations. Nothing smaller than 9 pt.
+- **Hierarchy:** three levels, so that the eye finds the panel first, then the axes, then the key. Panel titles are 10 pt bold in ink; axis labels 10 pt regular in ink; legends, annotations and direct labels 9 pt regular in the secondary ink (`#5a606b`); tick labels 9 pt in ink.
+- **Fitting the text:** a larger size is made to fit by layout, not by shrinking: one shared axis label per grid of panels (`grid_labels`), short or two-line category names with the full names in the caption, and fewer ticks.
 - **Case:** sentence case for axis labels and panel titles ("Share of runs that reach ten features"). Units in parentheses.
 - **Numbers:** plain numbers on log axes, with thousands written as k (10, 100, 1k, 10k, 100k), so that four decades fit a half-width panel. No scientific notation unless the range demands it.
 
@@ -54,10 +55,10 @@ One mark and few hues. Colour is reserved for configurations and is the same in 
 | Uniform start (pilot) | plum `#7e57a6` |
 | Log-uniform start (pilot) | ochre `#b5891c` |
 
-- **One marker shape.** Every point is a filled circle, 3.6 pt, with a 0.5 pt white edge. Shape never encodes anything; colour (and, for neutrals, lightness) does.
+- **One marker shape.** Every point is a filled circle, 3.6 pt, partly transparent and without an edge (see Ink and marks). Shape never encodes anything; colour (and, for neutrals, lightness) does.
 - **Checked for colour vision.** The three main colours pass all-pairs checks on white (CIEDE2000 under Machado full-severity simulation: worst CVD ΔE 18.8, worst normal-vision ΔE 35.8), and each has at least 3:1 contrast on white. Plum and ochre pass as a pair (worst CVD ΔE 22.2). No five hues pass together, so the uniform and log-uniform starts never share a panel with the OBL, sparse or NSGAII-MIIP configurations; a figure showing all four starts uses one titled panel per start.
 - **All figures are in colour.** The paper is read in colour; no greyscale version is made.
-- **Lightness as a second cue.** In CIELAB, OBL blue has L* 40, sparse orange 60 and NSGAII-MIIP teal 59. Sparse and NSGAII-MIIP thus differ only in hue. Where they share a panel, another cue separates them: points are offset by configuration, and the NSGAII-MIIP line is dashed (`LINESTYLE`). All other lines are solid. Plum (L* 44) and ochre (L* 60) differ in lightness.
+- **Lightness as a second cue.** In CIELAB, OBL blue has L* 40, sparse orange 60 and NSGAII-MIIP teal 59. Sparse and NSGAII-MIIP thus differ only in hue. Where their points share a panel, they are offset by configuration. Every line is solid: a dash makes one series stand out as if it were the main one, so no configuration is dashed; where sparse and NSGAII-MIIP lines could be confused, they are told apart by position or a direct label. Plum (L* 44) and ochre (L* 60) differ in lightness.
 - **Differences take the colour of the first configuration.** A difference "a minus b" drawn as a single series is in the colour of a: sparse minus OBL in orange, NSGAII-MIIP minus OBL in teal.
 - **Non-configuration classes are neutral.** When a figure separates classes that are not configurations (the reach and quality parts of a difference, variants of an analysis, classifiers, mutation operators), they are drawn in neutral tones that differ in lightness, so they survive any colour-vision deficiency:
 
@@ -68,7 +69,7 @@ One mark and few hues. Colour is reserved for configurations and is the same in 
   | 3 (only with three classes) | mid grey `#6e7783` |
 
   With three classes they run dark, mid, light. In the sensitivity figure the registered result keeps its configuration colour (orange, sparse minus OBL) and the three variants take the neutral tones.
-- **Summaries in ink.** A mean or median drawn over the points is a near-black bar, 1.4 pt.
+- **Summaries in ink.** A mean or median drawn over the points is a near-black bar, 1.4 pt. Where the text tests a mean over datasets (the strips of per-dataset differences), a thin ink line, 0.8 pt, through the bar shows its 95% percentile-bootstrap interval (10,000 resamples, `mean_ci`), and the caption says so. Means over the five seeds of one dataset get no interval. Test results and p-values stay in the text.
 - **Groups of runs** (classifiers) are shown as panels or along an axis when the figure compares configurations; they take neutral tones only when the classifiers themselves are compared.
 
 ## Ink and marks
@@ -82,21 +83,24 @@ One mark and few hues. Colour is reserved for configurations and is the same in 
 | Axis lines | `#5a606b`, 0.6 pt, left and bottom only |
 | Zero or baseline | `#5a606b`, 0.6 pt, solid |
 
-- Data lines 1.2 pt. Markers 3.6 pt filled circles with a 0.5 pt white edge (3.0 pt in dense three-panel strips).
+- Data lines 1.2 pt, all solid. Markers 3.6 pt filled circles without an edge (3.0 pt in dense three-panel strips).
 - Categorical axes (groups of runs, starts, datasets) have no tick marks and no grid along the category; when the names are long, the categories run down the y axis, with labels of at most two lines.
 - Reference curves (analytic predictions) are muted grey, 0.8 pt, and labelled directly on the curve.
-- No dashed grid lines, no frames around legends, no shadows, no 3-D.
-- Overlapping points are offset slightly by configuration, not drawn with transparency alone.
+- No dashed lines or grid lines, no frames around legends, no shadows, no 3-D.
+- **Transparency shows overlap.** Points are drawn at alpha 0.55, so that points on top of each other build up to a darker spot and the reader can see how many there are; no white edge separates them. Points in a neutral tone are drawn at alpha 0.8 (`NEUTRAL_ALPHA`), because their lightness is the cue that names them. A figure with one point per category and nothing to overlap (the sensitivity figure) draws opaque points. Where series of different configurations sit at the same values, they are also offset slightly by configuration.
+- **Paired values are joined.** When the caption calls two points a pair (the reach and quality parts of one dataset), a thin muted line, 0.5 pt, joins them.
 
 ## Panels
 
 - **Small multiples** share axes and scales. A panel title names the group in plain words ("Random forest"), with no statistics.
 - **Panel order:** designed experiment first, then decision tree, random forest, LightGBM, left to right and top to bottom.
+- **Panel titles are left-aligned** over the panel, in bold (see Hierarchy), never centred.
 - **Panel letters** (a), (b), … are used only when the caption refers to panels with different content. Facets of one quantity are named by their titles.
 
 ## Legends and labels
 
-- One legend per figure, above the panels, without a frame. Point figures show a circle per entry, line figures a short line; never both. Direct labels are preferred when there are at most three series and space allows.
+- One legend per figure, without a frame, inside a panel: in the first panel, on its left, when the data leave room there; otherwise in the first free corner of another panel (the LightGBM panel in the reach-and-quality figure, the right panel of the sensitivity figure). In strips of categories, the axis may be extended by a free band above or below the categories to hold it. Never centred above the panels, where it competes with the panel titles.
+- Legend entries are 9 pt in the secondary ink, one entry per row. Point figures show an opaque circle per entry, line figures a short line; never both. Direct labels are preferred when there are at most three series and space allows.
 - No numbers printed on data points.
 - Axis labels say what is measured ("Features $d$", "Share of the fit budget"), not how it was computed.
 
@@ -106,9 +110,10 @@ Written in LaTeX, not in the figure. First sentence: the finding. Then what each
 
 ## Checklist before including a figure
 
-1. Width at most 125 mm and fonts at least 9 pt (10 pt for labels, titles and legends) at natural size.
+1. Width at most 125 mm and fonts at least 9 pt (10 pt for axis labels and bold panel titles, 9 pt for legends) at natural size.
 2. Only the paper's names; no experiment identifiers, file names or p-values.
 3. Configuration colours as in the table above, circles only, other classes in neutral tones; differences in the colour of the first configuration.
-4. Legend present for two or more configurations.
-5. Grid behind the data, solid and light; axis lines left and bottom.
-6. Rendered and looked at: no overlapping labels, nothing clipped.
+4. Legend present for two or more configurations, inside a panel, clear of the data; panel titles left-aligned.
+5. Points transparent and without an edge; no dashed lines.
+6. Grid behind the data, solid and light; axis lines left and bottom.
+7. Rendered and looked at: no overlapping labels, no legend over data, nothing clipped.

@@ -2,7 +2,7 @@
 
 Run from the repository root:  python manuscript/figures/make_figures.py
 Reads evidence/H13-E01/tables/ only and writes vector PDFs next to this file.
-Every style value is in STYLE, MARK, CONFIG, NEUTRAL, PILOT_START and GRIDS;
+Every style value is in STYLE, MARK, CONFIG, NEUTRAL, PILOT_START, GRIDS and ANNOT;
 see manuscript/FIGURE-STYLE.md.
 """
 from __future__ import annotations
@@ -32,12 +32,12 @@ STYLE = {
     "grid": "#e9ebee",
 }
 
-# One mark everywhere: a filled circle with a thin white edge. Colour alone names the series.
-MARK = dict(ls="none", marker="o", ms=3.6, mec="white", mew=0.5)
+# One mark everywhere: a filled circle, partly transparent and without an edge, so that points
+# drawn on top of each other read as a darker spot. Colour alone names the series.
+MARK = dict(ls="none", marker="o", ms=3.6, mew=0, alpha=0.55)
 
 # Colour is reserved for configurations and is the same in every figure (FIGURE-STYLE.md).
-# Sparse start and NSGAII-MIIP have the same lightness, so a line of NSGAII-MIIP is dashed.
-LINESTYLE = {"nsgaii_miip": (0, (4, 1.6))}
+# Every line is solid; no configuration is singled out by a dash.
 CONFIG = {
     "nsga2": dict(label="OBL start", color="#285fa8"),
     "nsga2_sparse": dict(label="Sparse start", color="#e07434"),
@@ -48,6 +48,8 @@ SPARSE = CONFIG["nsga2_sparse"]["color"]
 # Classes that are not configurations (parts of a difference, analysis variants, classifiers,
 # mutation operators) are neutral: dark slate first, then light grey; mid grey only for a third.
 NEUTRAL = {"dark": "#2f3b4c", "mid": "#6e7783", "light": "#a7aeb8"}
+# Neutral classes are told apart by lightness, which strong transparency would wash out.
+NEUTRAL_ALPHA = 0.8
 
 # The pilot (H14-E02). Its two starts over all sizes are plum and ochre; they never share a panel
 # with the OBL or sparse start, because no five hues pass the all-pairs check together.
@@ -85,8 +87,11 @@ def setup() -> None:
         "mathtext.fontset": "stix",
         "font.size": 10,
         "axes.titlesize": 10,
+        "axes.titleweight": "bold",
+        "axes.titlelocation": "left",
         "axes.labelsize": 10,
-        "legend.fontsize": 10,
+        "legend.fontsize": 9,
+        "legend.labelcolor": STYLE["secondary"],
         "figure.labelsize": 10,
         "xtick.labelsize": 9,
         "ytick.labelsize": 9,
@@ -151,31 +156,46 @@ def baseline(ax, y: float = 0.0, axis: str = "y") -> None:
 
 
 def dots(ax, x, y, color, label=None, zorder=3, **kw) -> None:
+    if color in NEUTRAL.values():
+        kw = {"alpha": NEUTRAL_ALPHA, **kw}
     ax.plot(x, y, color=color, label=label, zorder=zorder, **{**MARK, **kw})
 
 
-def mean_bar(ax, centre, value, half=0.28, axis="x") -> None:
-    """A mean as a short ink bar across a strip; `axis` is the axis the strips run along."""
+def mean_bar(ax, centre, value, half=0.28, axis="x", ci=None) -> None:
+    """A mean as a short ink bar across a strip; `axis` is the axis the strips run along.
+    `ci` = (low, high) adds the 95% interval of the mean as a thin ink line through the bar."""
     span = [centre - half, centre + half]
     xs, ys = (span, [value] * 2) if axis == "x" else ([value] * 2, span)
     ax.plot(xs, ys, color=STYLE["ink"], lw=1.4, solid_capstyle="butt", zorder=4)
+    if ci is not None:
+        xs, ys = ([centre] * 2, list(ci)) if axis == "x" else (list(ci), [centre] * 2)
+        ax.plot(xs, ys, color=STYLE["ink"], lw=0.8, solid_capstyle="butt", zorder=4)
 
 
-def legend_above(fig, entries, kind: str = "dot", ncol=None) -> None:
-    """One legend above the panels; `entries` are configuration keys or (label, colour) pairs."""
+def mean_ci(values, n_boot: int = 10_000, seed: int = 20200) -> tuple[float, float]:
+    """Percentile bootstrap 95% interval of the mean (display only; the tests are in the text)."""
+    v = np.asarray(values, float)
+    rng = np.random.default_rng(seed)
+    means = rng.choice(v, size=(n_boot, len(v)), replace=True).mean(axis=1)
+    return tuple(np.percentile(means, [2.5, 97.5]))
+
+
+def legend_in(ax, entries, kind: str = "dot", loc: str = "upper left", anchor=None) -> None:
+    """One legend per figure, inside the first panel where the data leave room (left when
+    possible), one entry per row, 9 pt in the secondary ink. `entries` are configuration keys
+    or (label, colour) pairs; `anchor` is an optional (x, y) in axes fractions for `loc`."""
     pairs = [(CONFIG[e]["label"], CONFIG[e]["color"]) if isinstance(e, str) else e
              for e in entries]
     if kind == "line":
-        styles = [LINESTYLE.get(e, "-") if isinstance(e, str) else "-" for e in entries]
-        handles = [plt.Line2D([], [], color=c, lw=1.6, ls=st, label=lab)
-                   for (lab, c), st in zip(pairs, styles)]
-        length = 2.4
+        handles = [plt.Line2D([], [], color=c, lw=1.6, label=lab) for lab, c in pairs]
+        length = 1.8
     else:
-        handles = [plt.Line2D([], [], color=c, label=lab, **{**MARK, "ms": 4.6})
+        handles = [plt.Line2D([], [], color=c, label=lab, **{**MARK, "ms": 4.2, "alpha": 1})
                    for lab, c in pairs]
         length = 0.8
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 1.0),
-               ncol=ncol or len(handles), handlelength=length)
+    kw = dict(bbox_to_anchor=anchor) if anchor else {}
+    ax.legend(handles=handles, loc=loc, ncol=1, handlelength=length, labelspacing=0.3,
+              borderpad=0.2, **kw)
 
 
 def group_ticks(ax, labels, axis: str = "x") -> None:
@@ -259,13 +279,15 @@ def fig_reach_quality() -> None:
     for ax, (g, title) in zip(axes, GRIDS.items()):
         s = t[t.grid == g]
         baseline(ax)
+        # A thin line joins the two parts of one dataset.
+        ax.vlines(s.d, s.quality_term, s.reach_term, color=STYLE["muted"], lw=0.5, zorder=2)
         for j, (col, lab, c) in enumerate(parts):
             dots(ax, s.d, s[col], c, zorder=3 + j)
         log_axis(ax)
         ax.set_title(title)
         ax.set_ylim(-0.25, 1.05)
     grid_labels(fig, "Features $d$", "AUF difference, sparse minus OBL start")
-    legend_above(fig, [(lab, c) for _, lab, c in parts])
+    legend_in(axes[3], [(lab, c) for _, lab, c in parts], loc="upper right")
     save(fig, "fig_reach_quality")
 
 
@@ -287,7 +309,7 @@ def fig_reach_vs_d() -> None:
                      color=STYLE["secondary"], fontsize=ANNOT,
                      arrowprops=dict(arrowstyle="-", color=STYLE["muted"], lw=0.6))
     grid_labels(fig, "Features $d$", "Share of runs that reach ten features")
-    legend_above(fig, CONFIG)
+    legend_in(axes[0], CONFIG, loc="center right")
     save(fig, "fig_reach_vs_d")
 
 
@@ -302,14 +324,13 @@ def fig_time_to_reach() -> None:
             x, y = kaplan_meier(s.ttr_share, s.ttr_reached)
             x = np.concatenate([[0.005], x, [1.0]])
             y = np.concatenate([[0.0], y, [y[-1] if len(y) else 0.0]])
-            ax.step(x, y, where="post", color=CONFIG[m]["color"], zorder=3,
-                    ls=LINESTYLE.get(m, "-"))
+            ax.step(x, y, where="post", color=CONFIG[m]["color"], zorder=3)
         log_axis(ax)
         ax.set_xlim(0.005, 1.0)
         ax.set_ylim(-0.03, 1.03)
         ax.set_title(title)
     grid_labels(fig, "Share of the fit budget spent", "Share of runs that have reached ten features")
-    legend_above(fig, CONFIG, kind="line")
+    legend_in(axes[0], CONFIG, kind="line", loc="center left", anchor=(0.27, 0.58))
     save(fig, "fig_time_to_reach")
 
 
@@ -323,7 +344,7 @@ def fig_large_end() -> None:
         p = m[m.grid == g].pivot(index="dataset", columns="method", values="best_f1")
         diff = (p["nsga2_sparse"] - p["nsga2"]).dropna()
         dots(a, i + rng.uniform(-0.18, 0.18, len(diff)), diff, SPARSE)
-        mean_bar(a, i, diff.mean())
+        mean_bar(a, i, diff.mean(), ci=mean_ci(diff))
     group_ticks(a, GROUP_TICKS)
     a.set_ylabel("Best test F1 at any size,\nsparse minus OBL start")
     a.set_title("(a) Best score")
@@ -332,7 +353,7 @@ def fig_large_end() -> None:
               .reset_index())
     dd = np.logspace(1, np.log10(250_000), 50)
     b.plot(dd, dd / 2, color=STYLE["muted"], lw=0.8, zorder=2)
-    b.text(2_000, 2_000 / 2 * 2.6, "$d/2$", color=STYLE["secondary"], fontsize=ANNOT)
+    b.text(12_000, 12_000 / 2 / 6, "$d/2$", color=STYLE["secondary"], fontsize=ANNOT)
     for meth, c in CONFIG.items():
         s = pooled[pooled.method == meth]
         dots(b, s.d, s.max_front, c["color"])
@@ -341,7 +362,7 @@ def fig_large_end() -> None:
     b.set_xlabel("Features $d$")
     b.set_ylabel("Largest subset on the front")
     b.set_title("(b) Largest subset")
-    legend_above(fig, CONFIG)
+    legend_in(b, CONFIG)
     save(fig, "fig_large_end")
 
 
@@ -358,7 +379,7 @@ def fig_three_arms() -> None:
             p = m[m.grid == g].pivot(index="dataset", columns="method", values="reach")
             diff = (p[ma] - p[mb]).dropna()
             dots(ax, i + rng.uniform(-0.2, 0.2, len(diff)), diff, CONFIG[ma]["color"])
-            mean_bar(ax, i, diff.mean(), half=0.3)
+            mean_bar(ax, i, diff.mean(), half=0.3, ci=mean_ci(diff))
         group_ticks(ax, BENCH_TICKS)
         ax.set_title(title)
     axes[0].set_ylabel("Difference in the share of\nruns that reach ten features")
@@ -376,7 +397,7 @@ def fig_repeats() -> None:
         ax.set_ylim(-0.03, 1.03)
         ax.set_title(title)
     grid_labels(fig, "Features $d$", "Share of proposed subsets already evaluated")
-    legend_above(fig, ["nsga2", "nsga2_sparse"])
+    legend_in(axes[0], ["nsga2", "nsga2_sparse"], loc="center left")
     save(fig, "fig_repeats")
 
 
@@ -397,7 +418,7 @@ def fig_missing() -> None:
             s = q[(q.variant == v) & (q.part == part)].set_index("grid")
             xs = [s.loc[g, col] if g in s.index else np.nan for g in rows]
             ys = np.arange(len(rows)) + (1.5 - j) * 0.16
-            dots(ax, xs, ys, c, label=lab)
+            dots(ax, xs, ys, c, label=lab, alpha=1)
         group_ticks(ax, [GRIDS[g].replace(" (", "\n(") for g in rows], axis="y")
         ax.set_title(title)
     axes[0].set_xlim(0, 1)
@@ -407,7 +428,7 @@ def fig_missing() -> None:
     axes[1].set_xlim(0.9, 1.005)
     axes[1].set_xlabel("Share")
     axes[0].set_ylim(-0.5, len(rows) - 0.5)
-    legend_above(fig, list(variants.values()), ncol=2)
+    legend_in(axes[1], list(variants.values()), loc="center left")
     save(fig, "fig_missing")
 
 
@@ -442,7 +463,7 @@ def fig_classifier() -> None:
                  rotation=45, rotation_mode="anchor", ha="left", va="top")
     axes[1].text(0.20, 0.99, "above the line:\nhigher than\nunder the tree", color=STYLE["secondary"],
                  fontsize=ANNOT, ha="left", va="top")
-    legend_above(fig, [(lab, c) for _, lab, c in others])
+    legend_in(axes[0], [(lab, c) for _, lab, c in others])
     save(fig, "fig_classifier")
     print(f"  common datasets: {len(lead)}")
 
@@ -502,7 +523,8 @@ def fig_pilot_starts() -> None:
         ax.xaxis.set_major_locator(MaxNLocator(4))
         ax.set_title(title)
         ax.set_xlabel("Minus the sparse start")
-    legend_above(fig, [(PILOT_START[m]["label"], PILOT_START[m]["color"]) for m in starts])
+    axes[0].set_ylim(-0.5, len(rows) + 0.25)
+    legend_in(axes[0], [(PILOT_START[m]["label"], PILOT_START[m]["color"]) for m in starts])
     save(fig, "fig_pilot_starts")
 
 
@@ -556,7 +578,8 @@ def fig_pilot_min1() -> None:
         group_ticks(ax, [PILOT_START[m]["label"].replace(" start", "") for m in rows], axis="y")
         ax.set_title(title)
         ax.set_xlabel(xl)
-    legend_above(fig, [(mu["label"], mu["color"]) for mu in MUTATION.values()])
+    axes[0].set_ylim(-1.75, len(rows) - 0.5)
+    legend_in(axes[0], [(mu["label"], mu["color"]) for mu in MUTATION.values()], loc="lower left")
     save(fig, "fig_pilot_min1")
 
 

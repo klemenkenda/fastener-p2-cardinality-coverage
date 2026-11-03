@@ -16,7 +16,7 @@ With a limit of ten features, the sparse start has a much higher AUF than the op
 \begin{figure}[!tbp]
   \centering
   \includegraphics{fig_reach_quality}
-  \caption{The split of the AUF difference between the two starts is dominated by reach. Each pair of points is one dataset: the part of the sparse start's AUF lead due to reaching more limits (reach part) and the part due to better scores at the limits both reach (quality part). Test split, seed means, limit of ten features}
+  \caption{The split of the AUF difference between the two starts is dominated by reach. Each pair of points joined by a line is one dataset: the part of the sparse start's AUF lead due to reaching more limits (reach part) and the part due to better scores at the limits both reach (quality part). Test split, seed means, limit of ten features}
   \label{fig:reach-quality}
 \end{figure}
 
@@ -44,7 +44,7 @@ The sparse start reaches the limit in all 594 of its runs. Every one of its retu
 \begin{figure}[!tbp]
   \centering
   \includegraphics{fig_time_to_reach}
-  \caption{The sparse start holds a subset with at most ten features from its first generation, while most opposition-based runs never reach one. Kaplan--Meier curves of the share of runs whose archive holds such a subset, against the share of the fit budget spent (logarithmic); NSGAII-MIIP dashed. Runs within a group are pooled for display; the tests in the text are per dataset}
+  \caption{The sparse start holds a subset with at most ten features from its first generation, while most opposition-based runs never reach one. Kaplan--Meier curves of the share of runs whose archive holds such a subset, against the share of the fit budget spent (logarithmic). Runs within a group are pooled for display; the tests in the text are per dataset}
   \label{fig:time}
 \end{figure}
 
@@ -56,7 +56,7 @@ Figure~\ref{fig:time} shows when runs first reach the limit. All runs of the spa
 \begin{figure}[!tbp]
   \centering
   \includegraphics{fig_large_end}
-  \caption{The sparse start gives up the large subsets. (a) Per dataset, the best test F1 at any size of the sparse start minus that of the opposition-based start, by group (tree: decision tree; forest: random forest); bars are means. (b) The largest subset on the returned front, median over seeds and groups, with $d/2$ for reference. Test split}
+  \caption{The sparse start gives up the large subsets. (a) Per dataset, the best test F1 at any size of the sparse start minus that of the opposition-based start, by group (tree: decision tree; forest: random forest); bars are means, vertical lines their 95\% bootstrap intervals. (b) The largest subset on the returned front, median over seeds and groups, with $d/2$ for reference. Test split}
   \label{fig:cost}
 \end{figure}
 
@@ -70,7 +70,7 @@ The reason is visible in the sizes (Fig.~\ref{fig:cost}b). The fronts of the spa
 \begin{figure}[!tbp]
   \centering
   \includegraphics{fig_three_arms}
-  \caption{The improvement phase of our NSGAII-MIIP implementation adds little reach. Per dataset, the difference in the share of runs that reach ten features: (a) NSGAII-MIIP minus the opposition-based start, (b) the sparse start minus NSGAII-MIIP; bars are means}
+  \caption{The improvement phase of our NSGAII-MIIP implementation adds little reach. Per dataset, the difference in the share of runs that reach ten features: (a) NSGAII-MIIP minus the opposition-based start, (b) the sparse start minus NSGAII-MIIP; bars are means, vertical lines their 95\% bootstrap intervals}
   \label{fig:miip}
 \end{figure}
 
