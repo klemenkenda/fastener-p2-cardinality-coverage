@@ -79,6 +79,8 @@ Ta raziskovalni izračun je nadomestila registrirana post hoc analiza **H13-E01*
 
 **Stanje 2. novembra 2026:** A1, A3–A10 in C16 so opravljeni v H13-E01; C17 je opravljen za H13-E01 ([evidence/H13-E01/](evidence/H13-E01/)). Odprti so A2, B11–B14 in C15.
 
+**Stanje 4. novembra 2026:** B11–B14 so opravljeni v pilotu H14-E02. Iz njega je bila izpeljana napoved, koliko učenj potrebuje začetek OBL, da prvič doseže k ≤ 10: F(d) = exp(−0,96 + 1,88 ln d). Napoved je bila registrirana kot potrditveni preizkus H15 ([DEC-59](https://github.com/klemenkenda/fastener-experiments/blob/master/experiments/DECISIONS.md#dec-59)) in preizkušena v H15-E02 na sedmih zbirkah, na katerih NSGA-II še ni tekel. **Izid: podprto** v vseh treh delih. Naklon je 1,70 [1,61; 1,82], skupaj s H14 1,75 [1,63; 1,93]; interval izključi napovedani 1,88. Rokopis navaja naklon 1,7 in kot omejitev navede, da se d in število vrstic spreminjata skupaj. Posnetek je v [evidence/H15-E02/](evidence/H15-E02/).
+
 ### A. Analiza obstoječih tekov (brez novega računanja)
 
 1. **Registrirati ponovno analizo H5H6** v `fastener-experiments` kot post hoc sekundarno analizo, z izrecno navedbo, da so bile številke zgoraj že pogledane. Ne predstavljati je kot potrditve.

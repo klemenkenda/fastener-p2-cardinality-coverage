@@ -583,9 +583,56 @@ def fig_pilot_min1() -> None:
     save(fig, "fig_pilot_min1")
 
 
+# ------------------------------------------------------- confirmatory test
+# H15-E02: the OBL start's fits-to-reach on seven new datasets, against the line fitted on the
+# pilot's 10x runs. The pilot's points are the fit's data, a class that is not a configuration,
+# so they are neutral; the new runs keep the OBL colour.
+CONFIRM = ROOT / "evidence" / "H15-E02" / "tables"
+CONFIRM_LINE = (-0.9607461167011995, 1.8765480534645083)  # registered (DEC-59), ln F = a + b ln d
+BENCH_BUDGETS = (2_000, 12_000)
+
+
+def fig_confirm() -> None:
+    """Fits until the archive first holds a subset of at most ten features, against d."""
+    runs_ = pd.read_csv(CONFIRM / "runs.csv")
+    per = pd.read_csv(CONFIRM / "per_dataset.csv")
+    p = pilot_runs()
+    p = p[(p.method == "p2_obl_b10") & p.ttr_reached]
+    fig, ax = plt.subplots(figsize=(FULL_WIDTH, 66 * MM), constrained_layout=True)
+    a, b = CONFIRM_LINE
+    dd = np.logspace(np.log10(100), np.log10(1300), 100)
+    line = np.exp(a + b * np.log(dd))
+    ax.fill_between(dd, line / 2, line * 2, color=STYLE["grid"], lw=0, zorder=1)
+    ax.plot(dd, line, color=STYLE["muted"], lw=0.8, zorder=2)
+    for y in BENCH_BUDGETS:
+        ax.axhline(y, color=STYLE["muted"], lw=0.6, zorder=2)
+    ax.text(1250, np.sqrt(np.prod(BENCH_BUDGETS)), "Benchmark\nbudgets", color=STYLE["secondary"],
+            fontsize=ANNOT, ha="right", va="center")
+    ax.text(215, 90_000, "Prediction from the pilot,\nwithin a factor of 2", color=STYLE["secondary"],
+            fontsize=ANNOT, ha="center", va="center")
+    ax.annotate("", xy=(260, np.exp(a + b * np.log(260))), xytext=(240, 58_000),
+                arrowprops=dict(arrowstyle="-", color=STYLE["muted"], lw=0.6))
+    pilot_c, new_c = NEUTRAL["light"], CONFIG["nsga2"]["color"]
+    dots(ax, p.d, p.ttr_fits, pilot_c)
+    dots(ax, runs_.d, runs_.ttr_fits, new_c)
+    for _, r in per.iterrows():
+        ax.plot([r.d / 1.045, r.d * 1.045], [r.median_fits_to_reach] * 2, color=STYLE["ink"],
+                lw=1.4, solid_capstyle="butt", zorder=4)
+    log_axis(ax, "x")
+    log_axis(ax, "y")
+    ax.set_xticks([100, 200, 500, 1000], ["100", "200", "500", "1k"])
+    ax.set_xlim(100, 1300)
+    ax.set_ylim(1_500, 400_000)
+    ax.set_xlabel("Features $d$")
+    ax.set_ylabel("Fits until the search\nfirst holds ten features")
+    legend_in(ax, [("Seven new datasets", new_c), ("Pilot datasets (fitted)", pilot_c)])
+    save(fig, "fig_confirm")
+
+
 if __name__ == "__main__":
     setup()
     for f in (fig_reach_quality, fig_reach_vs_d, fig_time_to_reach, fig_large_end,
               fig_three_arms, fig_repeats, fig_missing, fig_classifier,
-              fig_pilot_budget, fig_pilot_starts, fig_pilot_unchanged, fig_pilot_min1):
+              fig_pilot_budget, fig_pilot_starts, fig_pilot_unchanged, fig_pilot_min1,
+              fig_confirm):
         f()

@@ -1,0 +1,85 @@
+{
+    "copy_date": "2026-11-04",
+    "experiment": "H15-E02",
+    "status": "P2 confirmatory test (DEC-59, rerun DEC-60): prediction fitted on H14-E02, tested on seven datasets no NSGA-II arm had run on, new seeds; supported on all three parts; the slope's interval excludes the predicted exponent",
+    "experiments_repository": "https://github.com/klemenkenda/fastener-experiments",
+    "experiments_commit": "aa909eefaeec044f2daeaa7734bd6eb364808254",
+    "source_paths_relative_to": "fastener-experiments repository root",
+    "sources": [
+        {
+            "source_path": "experiments/reports/H15-E02/tables/per_dataset.csv",
+            "sha256": "3a6b44327f80e3e79a31a23e6594e5490c652ff669cb511f40d54805c28a9692",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/tables/runs.csv",
+            "sha256": "6c26bc5b657585f0b7c3b7c1fb890ee6e5688fb64c20020b3167f832c0014a2b",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/tables/slope.csv",
+            "sha256": "15f7dc94130b8f06879f5bd492d3b6dcd841f79a7e87a58581d05b9bd2fbcc79",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/tables/verdict.json",
+            "sha256": "e7fa0265a9baba0a19fc69d6ef9ee42a53dab98c2fe8a8c383169075215898e2",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/figures/F1_fits_to_reach_vs_d.png",
+            "sha256": "3d4285585c20713527b6958fd3a1df81872cd6fe41e55d645505cc241ad8b2e9",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/figures/F2_ratio_to_prediction.png",
+            "sha256": "d7e8f86b1b3375bad37b9e609ebc9a2df5b02331bd2311bcdabeb50d5238294c",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/figures/F3_reach_km.png",
+            "sha256": "a12a8c03cef92917abce4ce05fa4db1fe4bf8e8334e616838d98dca46af80220",
+            "copied": true
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/REPORT.md",
+            "sha256": "e96ea123fadcdffc33560e42e44a085637f5d70c3377ed187f61ef55698baca8",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/reports/H15-E02/SUPPORT.md",
+            "sha256": "32d61d07e51a090e82a563a631770d68e928426f81b4ef4bb465a607053c6614",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/h15_report.py",
+            "sha256": "13f44e352d5765de5723ec966a08b07bcba16a94bc953d968356135120a2e745",
+            "copied": false
+        },
+        {
+            "source_path": "experiments/h15_budgets.json",
+            "sha256": "ed33a95de18869974598792ceb3822558197100eb5c432a865bbacc73f6c05ec",
+            "copied": false
+        }
+    ],
+    "derived": {
+        "command": "python evidence/H15-E02/derived/h15_summary.py",
+        "inputs": [
+            "evidence/H15-E02/tables/per_dataset.csv",
+            "evidence/H15-E02/tables/runs.csv",
+            "evidence/H14-E02/tables/run_measures.csv"
+        ],
+        "environment": "Python 3.13.2, numpy 2.4.2, pandas 3.0.3, scipy 1.18.1",
+        "files": [
+            {
+                "path": "derived/h15_summary.py",
+                "sha256": "be31d4542c2f51980ad8138275779442a99280e05e39b23c090005ce6600f595"
+            },
+            {
+                "path": "derived/summary.csv",
+                "sha256": "4d2e5522fc4fb975dbd8acd786968b86acd2b2ce4aaf3261f128653cbae8ae2b"
+            }
+        ]
+    },
+    "scope": "Report tables and figures copied unchanged; REPORT.md, SUPPORT.md, the analysis code and the caps hashed, not copied. derived/ is computed here from the copied tables (pooled slope with H14-E02 and the summary numbers the report gives only in prose)."
+}

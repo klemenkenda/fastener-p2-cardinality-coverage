@@ -1,0 +1,11 @@
+quantity,value,lo,hi,n
+slope_h15_medians,1.70255,1.60717,1.81904,7
+slope_h15_seeds,1.73916,1.6574,1.82479,35
+slope_h14_h15_medians,1.75409,1.63113,1.92488,11
+geomean_ratio_datasets,1.23874,,,7
+seed_ratio_min,0.763668,,,35
+seed_ratio_max,2.01767,,,35
+seeds_outside_factor2,1,,,35
+max_share_of_cap,0.503621,,,35
+spearman_ratio_d,-0.892857,,,7
+spearman_ratio_train_rows,0.774806,,,7

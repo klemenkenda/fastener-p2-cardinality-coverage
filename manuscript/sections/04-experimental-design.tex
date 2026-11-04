@@ -8,7 +8,7 @@
 
 \input{tables/datasets}
 
-We use 46 classification datasets with 16 to 192{,}000 features and 2 to 39 classes (Table~\ref{tab:datasets}). Eight of them come from an experiment designed for this comparison and were chosen to cover feature counts from 36 to 10{,}000. They are EOData, a land-cover dataset built from Sentinel-2 satellite observations~\cite{Sircelj2020EOData} for which FASTENER was developed~\cite{Koprivec2020}; satimage and har from OpenML~\cite{Vanschoren2014OpenML}; and USPS, COIL20, gisette, Prostate\_GE, and arcene from the scikit-feature repository~\cite{Li2017ScikitFeature}. The other 38 datasets come from the UCR and UEA time series archives~\cite{Dau2019UCR,Bagnall2018UEA} and were run, together with EOData, in a broader benchmark of feature-selection methods. They were chosen to cover the range of dataset shapes in the archives: the archive datasets were grouped by the logarithms of their numbers of examples and features with $k$-means ($k = 7$), and three to seven datasets were taken from each group.
+We use 46 classification datasets with 16 to 192{,}000 features and 2 to 39 classes (Table~\ref{tab:datasets}). Eight of them come from an experiment designed for this comparison and were chosen to cover feature counts from 36 to 10{,}000. They are EOData, a land-cover dataset built from Sentinel-2 satellite observations~\cite{Sircelj2020EOData} for which FASTENER was developed~\cite{Koprivec2020}; satimage and har from OpenML~\cite{Vanschoren2014OpenML}; and USPS, COIL20, gisette, Prostate\_GE, and arcene from the scikit-feature repository~\cite{Li2017ScikitFeature}. The other 38 datasets come from the UCR and UEA time series archives~\cite{Dau2019UCR,Bagnall2018UEA} and were run, together with EOData, in a broader benchmark of feature-selection methods. They were chosen to cover the range of dataset shapes in the archives: the archive datasets were grouped by the logarithms of their numbers of examples and features with $k$-means ($k = 7$), and three to seven datasets were taken from each group. Seven further datasets are used only in the confirmatory test of Section~\ref{sec:confirm}.
 
 In the time series datasets, one row is one series, and its time points are the features. For a series with several channels, each pair of a channel and a time point is a feature. Neighboring time points are strongly correlated, so these datasets contain many redundant features, which is the situation feature selection is meant to address.
 
@@ -74,6 +74,26 @@ After the main analysis, we ran a pilot to examine three questions it raised: wh
 The pilot compares ten configurations of NSGA-II without the improvement phase. Four starts are combined with two mutations: the opposition-based, sparse, uniform, and log-uniform starts of Section~\ref{sec:access}, each with the balanced mutation and with a \emph{forced flip}. The forced flip applies the balanced mutation and then changes a child that it left unchanged by one feature: for $1 < k < d$ it adds a random unselected feature or removes a random selected one with equal probability, so the expected change in size of these forced moves is zero; for $k \leq 1$ it can only add, and for $k = d$ only remove. An unchanged empty child therefore gains one feature, while a child that the balanced mutation itself emptied stays empty and is scored as in Section~\ref{sec:problem}. The two other configurations give the opposition-based start three and ten times the budget. The 1$\times$ and 3$\times$ runs share their seeds and random draws with the 10$\times$ runs, so the three budgets are points on the same search trajectories, not independent runs. Configurations that differ only in mutation start from the same initial population, which we checked for every pair. Every run records each evaluated subset and, per generation, the numbers of proposals, cache hits, and children left unchanged by mutation.
 
 A comparison holds on a dataset if it holds in at least four of five seeds, paired by seed, and a part of a criterion holds if it holds on at least three of the four datasets. Four datasets are too few for a test over datasets.
+
+\subsection{Confirmatory Test of the Budget}
+\label{sec:confirm}
+
+The pilot showed that the opposition-based start reaches ten features if it is given enough fits (Section~\ref{sec:res-pilot}). To find out how many it needs, we measured the fits until its archive first held a subset with at most ten features in the 20 pilot runs with ten times the budget. A least-squares line through the logarithms of these fits and of $d$ gives the prediction
+\begin{equation}
+  F(d) = e^{-0.961}\, d^{\,1.877} \approx 0.38\, d^{\,1.88} .
+  \label{eq:confirm}
+\end{equation}
+For example, $F(500) \approx 44{,}000$ fits. The pilot's four datasets cannot fix the exponent well, so we registered this prediction and its criteria before testing it on seven datasets on which no NSGA-II configuration had been run: gas\_drift, volkert, and gina from OpenML~\cite{Vanschoren2014OpenML}, crop\_mapping and madelon from the UCI repository~\cite{Kelly2023UCI}, and Isolet and ORL from scikit-feature~\cite{Li2017ScikitFeature} (Table~\ref{tab:confirm}). None of them is a time series. They come from chemical sensing, crop mapping from satellite data, speech, handwritten digits, face images, an anonymized benchmark, and synthetic data, and they have 128 to 1{,}024 features, 2 to 40 classes, and more than 50 test rows each. They are split as in Section~\ref{sec:datasets}, with crop\_mapping and volkert sampled to 50{,}000 rows.
+
+The test uses the opposition-based start of the pilot with the decision tree, five new seeds (2030 to 2034), and the stopping rule. A run ends after the generation in which it first scores a subset with at most ten features, or at a cap of $4F(d)$ fits. Stopping early does not change the measurement: in the pilot, the 1$\times$ and 3$\times$ runs were exact beginnings of the 10$\times$ runs, so the fits to reach the limit do not depend on the budget. The fits are counted at the end of the generation, so they can be up to 100 too high. A run that does not reach the limit before the cap, the stopping rule, a 24-hour limit, or a failure is censored. The test has three parts:
+\begin{enumerate}
+  \item on every dataset, at least four of five runs reach the limit before the cap;
+  \item the median over the five runs lies within a factor of two of $F(d)$ on at least five of the seven datasets;
+  \item the least-squares slope of the logarithm of the median on $\log d$ has a 95\% bootstrap interval over datasets (10{,}000 resamples) whose lower end is above 1, so that the fits grow faster than in proportion to $d$.
+\end{enumerate}
+The prediction holds if all three parts hold. The first attempt was stopped by the check against uncommitted code before any run started and was repeated unchanged.
+
+\input{tables/confirm}
 
 \subsection{Implementation and Reproducibility}
 \label{sec:repro}

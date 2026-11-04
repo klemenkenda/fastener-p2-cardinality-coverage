@@ -47,6 +47,7 @@ Prevajanje v VS Code, podobno Overleafu: razširitev LaTeX Workshop (priporočen
 - [manuscript/](manuscript/): rokopis za ComSIS; [template/comsis/](template/comsis/): izvirna predloga revije.
 - [manuscript/supplement/](manuscript/supplement/): dodatno gradivo (velikosti učinkov, rezultati po zbirkah); tabele ustvari `make_tables.py` iz `evidence/`.
 - [evidence/R1/](evidence/R1/): dodatne statistike prve revizije (`review_supplement.py`, tabele in [manifest](evidence/R1/PROVENANCE.json)), izračunane iz destiliranih dnevnikov `fastener-experiments`.
+- [evidence/H15-E02/](evidence/H15-E02/): potrditveni preizkus (H15-E02): nespremenjene tabele in slike poročila s [manifestom](evidence/H15-E02/PROVENANCE.json) ter izpeljani povzetki v `derived/`.
 - [REPRODUCE.md](REPRODUCE.md): vstopna točka za reprodukcijo (commiti, delitve, okolje, ukazi).
 - [internal-reviews/](internal-reviews/): notranje recenzije in [odziv na recenzijo GPT-6.1](internal-reviews/REVIEW-gpt-6.1-sol-pro.fix.md) in [odziv na drugi krog](internal-reviews/REVIEW-round-2-2026-11-03.fix.md).
 - [evidence/H1_auf10_per_seed.csv](evidence/H1_auf10_per_seed.csv): nespremenjen posnetek izvorne tabele; [manifest](evidence/PROVENANCE.json) vsebuje izvor in SHA-256.

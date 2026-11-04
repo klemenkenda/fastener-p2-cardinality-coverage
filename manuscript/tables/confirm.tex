@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+% Values from evidence/H15-E02/tables/per_dataset.csv and runs.csv; classes from the H15
+% registration (fastener-experiments HYPOTHESES.md at 9b9ac09).
+\begin{table}[!tbp]
+\caption{Datasets of the confirmatory test and the fits the opposition-based start needed before its archive first held a subset with at most ten features. Predicted: the line fitted on the pilot, registered before the runs; observed: median and range over five seeds; ratio: median over prediction}
+\label{tab:confirm}
+\centering
+\small
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+Dataset & $d$ & Training & Classes & \multicolumn{3}{c}{Fits to reach ten features} & Ratio \\
+\cmidrule(lr){5-7}
+ & & rows & & Predicted & Observed & Range & \\
+\midrule
+gas\_drift & 128 & 8{,}346 & 6 & 3{,}444 & 5{,}276 & 3{,}251--6{,}109 & 1.53 \\
+crop\_mapping & 174 & 30{,}002 & 7 & 6{,}127 & 9{,}758 & 8{,}389--11{,}975 & 1.59 \\
+volkert & 180 & 30{,}002 & 10 & 6{,}530 & 7{,}986 & 7{,}602--12{,}213 & 1.22 \\
+madelon & 500 & 1{,}560 & 2 & 44{,}412 & 54{,}892 & 33{,}916--75{,}882 & 1.24 \\
+Isolet & 617 & 936 & 26 & 65{,}896 & 70{,}482 & 63{,}906--132{,}956 & 1.07 \\
+gina & 970 & 2{,}080 & 2 & 154{,}019 & 183{,}226 & 153{,}828--202{,}233 & 1.19 \\
+ORL & 1{,}024 & 240 & 40 & 170{,}501 & 162{,}597 & 153{,}897--214{,}244 & 0.95 \\
+\bottomrule
+\end{tabular}
+\end{table}
