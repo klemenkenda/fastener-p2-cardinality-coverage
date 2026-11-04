@@ -19,7 +19,7 @@ Each run has a fixed budget of model fits. A subset that was evaluated before is
 \subsection{Search Configurations}
 \label{sec:configurations}
 
-We compare three configurations of NSGA-II~\cite{Deb2002NSGAII}. All use the operators of NSGAII-MIIP~\cite{Li2025} in our own Python reimplementation\footnote{\url{https://github.com/klemenkenda/nsga2-fs}} of the authors' published MATLAB code. They differ only in the initial population and in whether the improvement phase runs:
+We compare three configurations of NSGA-II~\cite{Deb2002NSGAII}. All use the operators of NSGAII-MIIP~\cite{Li2025} in our own Python reimplementation\ifanonymous\else\footnote{\url{https://github.com/klemenkenda/nsga2-fs}}\fi of the authors' published MATLAB code. They differ only in the initial population and in whether the improvement phase runs:
 \begin{itemize}
   \item \textbf{Opposition-based (OBL) start}: the opposition-based initialization of NSGAII-MIIP (Section~\ref{sec:access}), without the improvement phase.
   \item \textbf{Sparse start}: subset sizes drawn uniformly from 1 to $\min(30, d)$, then that many features drawn at random, without the improvement phase.
@@ -98,4 +98,4 @@ The prediction holds if all three parts hold. The first attempt was stopped by t
 \subsection{Implementation and Reproducibility}
 \label{sec:repro}
 
-The code, run logs, derived tables, and a reproduction guide are publicly available; Supplementary Section~S2 gives the repositories, the software environment, and the recorded code commits.
+\ifanonymous The code, run logs, derived tables, and a reproduction guide will be made publicly available after review; Supplementary Section~S2 gives the software environment and how the code commits were recorded.\else The code, run logs, derived tables, and a reproduction guide are publicly available; Supplementary Section~S2 gives the repositories, the software environment, and the recorded code commits.\fi

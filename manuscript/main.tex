@@ -1,5 +1,11 @@
 \documentclass[runningheads]{comsis3}
 
+%% Double-anonymous review version: main-anon.tex and supplement-anon.tex define
+%% \anonymousversion before loading this file, which withholds the author, affiliation,
+%% funding, computing resources, and repository links.
+\newif\ifanonymous
+\ifdefined\anonymousversion\anonymoustrue\fi
+
 %% Necessary definitions for the running heads (filled in by the journal)
 \def\journalissue{Computer Science and Information Systems 00(0):0000--0000}
 \def\paperidnum{https://doi.org/10.2298/CSIS123456789X}
@@ -42,6 +48,11 @@ A Budget-Aware Study of Initialization and Search Operators}
 
 \titlerunning{Cardinality Coverage in Evolutionary Feature Selection}
 
+\ifanonymous
+\author{Anonymous Author(s)}
+
+\institute{Affiliation withheld for review}
+\else
 %% TODO: add co-authors and mark the corresponding author
 \author{Klemen Kenda\inst{1}\thanks{Corresponding author}}
 
@@ -50,6 +61,7 @@ A Budget-Aware Study of Initialization and Search Operators}
 \institute{Jo\v{z}ef Stefan Institute\\
   Jamova cesta 39, 1000 Ljubljana, Slovenia\\
   \email{klemen.kenda@ijs.si}}
+\fi
 
 \begin{document}
 
