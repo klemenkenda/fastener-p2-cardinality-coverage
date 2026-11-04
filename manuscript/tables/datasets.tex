@@ -1,66 +1,26 @@
 % !TEX root = ../main.tex
-% Rows generated from fastener-experiments distilled logs (splits), DATASETS_USED.md and
-% HYPOTHESES.md (classes) and h2h3_budgets.json (budgets); see evidence/ for provenance.
-\begin{table}[!htbp]
-\caption{Datasets, ordered by the number of features $d$. Train and test give rows; the validation part has as many rows as the test part. Budget: model fits per run}
+% Ranges over the per-dataset rows of supplement/datasets.tex (Table S7) and
+% tables/confirm.tex (Table 3; evidence/H15-E02/tables/per_dataset.csv, caps from
+% fastener-experiments h15_budgets.json).
+\begin{table}[!tbp]
+\caption{Datasets of the four experiments: ranges over the datasets of each. Rows are those of the training and test parts; the validation part has as many rows as the test part. Budget: model fits per run. EOData belongs to both the designed experiment and the benchmark, and the pilot's datasets come from the benchmark. The datasets are listed in Supplementary Table~S7 and, for the confirmatory test, in Table~\ref{tab:confirm}}
 \label{tab:datasets}
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{31mm}lrrrrr@{}}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-Dataset & Domain & $d$ & Train & Test & Classes & Budget \\
+Experiment & Datasets & $d$ & Training rows & Test rows & Classes & Budget \\
 \midrule
-PenDigits & handwriting & 16 & 6{,}594 & 2{,}199 & 10 & 2{,}000 \\
-ItalyPowerDemand & electricity & 24 & 658 & 219 & 2 & 2{,}000 \\
-satimage$^{a}$ & satellite & 36 & 3{,}858 & 1{,}286 & 6 & 6{,}000 \\
-Crop & satellite & 46 & 14{,}400 & 4{,}800 & 24 & 4{,}000 \\
-ProximalPhalanx\-OutlineCorrect & image outline & 80 & 535 & 178 & 2 & 12{,}000 \\
-TwoLeadECG & ECG & 82 & 698 & 232 & 2 & 2{,}000 \\
-Libras & gesture & 90 & 210 & 75 & 15 & 12{,}000 \\
-ElectricDevices & electricity & 96 & 9{,}983 & 3{,}327 & 7 & 6{,}000 \\
-MedicalImages & image & 99 & 683 & 229 & 10 & 12{,}000 \\
-ECG5000 & ECG & 140 & 3{,}000 & 1{,}000 & 5 & 6{,}000 \\
-Wafer & industrial sensor & 152 & 4{,}300 & 1{,}432 & 2 & 2{,}000 \\
-ChlorineConcentration & simulation & 166 & 2{,}585 & 861 & 3 & 4{,}000 \\
-Adiac & image outline & 176 & 469 & 156 & 37 & 12{,}000 \\
-EOData$^{a}$ & satellite & 182 & 29{,}976 & 10{,}008 & 24 & 6{,}000 / 2{,}000 \\
-LSST & astronomy & 216 & 2{,}955 & 985 & 14 & 6{,}000 \\
-Strawberry & spectra & 235 & 591 & 196 & 2 & 6{,}000 \\
-USPS$^{a}$ & handwriting & 256 & 5{,}578 & 1{,}860 & 10 & 6{,}000 \\
-Coffee & spectra & 286 & 34 & 11 & 2 & 12{,}000 \\
-Ham & spectra & 431 & 128 & 43 & 2 & 12{,}000 \\
-FordA & engine sensor & 500 & 2{,}953 & 984 & 2 & 6{,}000 \\
-BeetleFly & image outline & 512 & 24 & 8 & 2 & 12{,}000 \\
-Earthquakes & seismic & 512 & 275 & 93 & 2 & 12{,}000 \\
-har$^{a}$ & motion sensor & 561 & 6{,}181 & 2{,}059 & 6 & 6{,}000 \\
-OliveOil & spectra & 570 & 36 & 12 & 4 & 2{,}000 \\
-BasicMotions & motion sensor & 600 & 48 & 16 & 4 & 2{,}000 \\
-Epilepsy & motion sensor & 618 & 163 & 56 & 4 & 12{,}000 \\
-Computers & electricity & 720 & 300 & 100 & 2 & 12{,}000 \\
-UWaveGestureLibraryAll & gesture & 945 & 2{,}686 & 896 & 8 & 6{,}000 \\
-StarLightCurves & astronomy & 1{,}024 & 5{,}542 & 1{,}847 & 3 & 2{,}000 \\
-COIL20$^{a}$ & object images & 1{,}024 & 880 & 280 & 20 & 6{,}000 \\
-NATOPS & motion capture & 1{,}224 & 216 & 72 & 6 & 12{,}000 \\
-FingerMovements & EEG & 1{,}400 & 248 & 84 & 2 & 6{,}000 \\
-CinCECGTorso & ECG & 1{,}639 & 852 & 284 & 4 & 6{,}000 \\
-PhonemeSpectra & speech & 2{,}387 & 4{,}016 & 1{,}326 & 39 & 2{,}000 \\
-HandOutlines & image outline & 2{,}709 & 822 & 274 & 2 & 12{,}000 \\
-gisette$^{a}$ & handwriting & 5{,}000 & 4{,}200 & 1{,}400 & 2 & 6{,}000 \\
-FaultDetectionA & vibration & 5{,}120 & 8{,}184 & 2{,}728 & 3 & 6{,}000 \\
-EthanolConcentration & spectra & 5{,}253 & 316 & 104 & 4 & 12{,}000 \\
-SelfRegulationSCP1 & EEG & 5{,}376 & 337 & 112 & 2 & 12{,}000 \\
-Prostate\_GE$^{a}$ & gene expression & 5{,}966 & 62 & 20 & 2 & 6{,}000 \\
-FaceDetection & MEG & 8{,}928 & 5{,}650 & 1{,}882 & 2 & 12{,}000 \\
-arcene$^{a}$ & mass spectrometry & 10{,}000 & 120 & 40 & 2 & 12{,}000 \\
-Heartbeat & heart sound & 24{,}705 & 245 & 82 & 2 & 12{,}000 \\
-EigenWorms & motion & 107{,}904 & 155 & 52 & 5 & 12{,}000 \\
-PEMS-SF & traffic & 138{,}672 & 264 & 88 & 7 & 2{,}000 \\
-MotorImagery & ECoG & 192{,}000 & 226 & 76 & 2 & 6{,}000 \\
+Designed & 8 & 36--10{,}000 & 62--29{,}976 & 20--10{,}008 & 2--24 & 6{,}000--12{,}000 \\
+Benchmark & 39 & 16--192{,}000 & 24--29{,}976 & 8--10{,}008 & 2--39 & 2{,}000--12{,}000 \\
+Pilot & 4 & 176--720 & 275--591 & 93--196 & 2--37 & 1, 3, 10$\times$$^{a}$ \\
+Confirmatory & 7 & 128--1{,}024 & 240--30{,}002 & 80--9{,}999 & 2--40 & until reach$^{b}$ \\
 \bottomrule
 \end{tabular}
 
 \smallskip
 \raggedright
-$^{a}$~Dataset of the experiment designed for this comparison. EOData is also in the benchmark; its two budgets are those of the designed experiment and of the benchmark.
+\footnotesize
+$^{a}$~Multiples of the benchmark budget. $^{b}$~Each run stops once it reaches ten features (Section~\ref{sec:confirm}).
 \end{table}

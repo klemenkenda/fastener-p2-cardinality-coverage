@@ -26,7 +26,7 @@ These studies establish the importance of initialization, subset-size control, f
 \subsection{Our Contributions in Relation to Existing Work}
 \label{sec:positioning}
 
-Table~\ref{tab:positioning} lists the contributions of this paper in order of importance. For each, it states what is new here and which prior work it builds on.
+Table~\ref{tab:positioning} lists the contributions of this paper in order of importance, with the prior work each builds on; the results behind them are summarized in Section~\ref{sec:introduction}.
 
 \begin{table}[!tbp]
 \caption{Contributions of this paper, in order of importance, and the prior work each builds on}
@@ -34,33 +34,27 @@ Table~\ref{tab:positioning} lists the contributions of this paper in order of im
 \centering
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{22mm}>{\raggedright\arraybackslash}p{52mm}>{\raggedright\arraybackslash}p{44mm}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{58mm}>{\raggedright\arraybackslash}p{62mm}@{}}
 \toprule
-Contribution & New in this paper & Builds on \\
+Contribution & Builds on \\
 \midrule
-Reach, not quality, explains the AUF gap
-  & On 46 datasets, 39 with three classifiers, the split of the AUF difference between the two starts is dominated by reach (98--100\% of the absolute reach and quality parts). At sizes both reach, the mean test F1 difference is below 0.02 under two classifiers and inconclusive under the third.
-  & Initialization-only comparison in NSGA-II~\cite{Miyandoab2024}; sparse and dense starts in one gene-panel application~\cite{Cong2026}; AUF~\cite{Koprivec2020}. \\
+Reach, not quality, explains the AUF gap at a limit of ten features
+  & Initialization-only comparison in NSGA-II~\cite{Miyandoab2024}; sparse and dense starts in one application~\cite{Cong2026}; AUF~\cite{Koprivec2020} \\
 \addlinespace
-When reach fails
-  & The probability that an initial population holds a small subset; within the benchmark budgets, the OBL search reaches ten features on every dataset with at most 99 features and on none with more than 512, and with ten times the budget on all four pilot datasets.
-  & Opposition-based initialization~\cite{Tizhoosh2005OBL,Li2025}; benefits of sparse sampling in large sparse problems~\cite{Kropp2022}. \\
+When reach fails: the initial population, the benchmark boundary, and fits growing as about $d^{1.7}$ on unseen datasets
+  & Opposition-based initialization~\cite{Tizhoosh2005OBL,Li2025}; sparse sampling in large sparse problems~\cite{Kropp2022} \\
 \addlinespace
 An informed improvement phase does not close the gap
-  & In our implementation of NSGAII-MIIP, the mutual-information phase raises reach by only 0.04--0.08.
-  & NSGAII-MIIP~\cite{Li2025}. \\
+  & NSGAII-MIIP~\cite{Li2025} \\
 \addlinespace
-The cost of a sparse start
-  & Neither start covers all sizes: the sparse start's best test F1 is lower by 0.007--0.029 on average, and its fronts end by 36 features. Under the tested operators, starts over all sizes also lose the large subsets.
-  & Size sampling over a chosen range~\cite{Miyandoab2024}, used here with 1--30 features; size-allocated and bounded starts~\cite{Deniz2019,Cattelani2022}. \\
+The cost of a sparse start: the large subsets are lost
+  & Size sampling over a chosen range~\cite{Miyandoab2024}; size-allocated and bounded starts~\cite{Deniz2019,Cattelani2022} \\
 \addlinespace
-Why the search stays near its start
-  & Balanced mutation changes $2k/d$ features on average, leaving children unchanged at about the rate $e^{-2k/d}$; 96--99\% of the subsets proposed in sparse runs had been evaluated before. A forced change lowers the cost but not the quality.
-  & Balanced mutation~\cite{Oh2004} and its unchanged expected size~\cite{Li2025}; duplicate handling and caching~\cite{Jiao2024PRDH,Wang2023Dup,Li2020GADMS}. \\
+Why the search stays near its start: unchanged children and repeats
+  & Balanced mutation~\cite{Oh2004} and its unchanged expected size~\cite{Li2025}; duplicate handling and caching~\cite{Jiao2024PRDH,Wang2023Dup,Li2020GADMS} \\
 \addlinespace
 Reporting recommendations
-  & Reach, scores at sizes both methods reach, the best score at any size, proposals, new fits, time, and unfinished runs.
-  & Evaluation budgets versus computing time in benchmarking~\cite{BartzBeielstein2020}. \\
+  & Evaluation budgets versus computing time in benchmarking~\cite{BartzBeielstein2020} \\
 \bottomrule
 \end{tabular}
 \end{table}

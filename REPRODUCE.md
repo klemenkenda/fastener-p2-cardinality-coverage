@@ -29,7 +29,7 @@ Runs started with `--experiment` refuse a working tree with uncommitted code; no
 
 ## Data and splits
 
-- The datasets are downloaded with the `download_*.py` scripts of `fastener-experiments` and listed in Table 2 of the paper.
+- The datasets are downloaded with the `download_*.py` scripts of `fastener-experiments` and summarized in Table 2 of the paper and listed in Supplementary Table S7 and, for the confirmatory test, Table 3.
 - Every dataset is split once into stratified training, validation, and test parts in the proportions 60/20/20 (`datasets.py`: `VAL_FRACTION = TEST_FRACTION = 0.20`, `SPLIT_SEED = 20200`). The split is the same for every seed and configuration.
 - Time series archives merge their own train and test parts before the split. Multivariate series are flattened channel by channel. Nothing is scaled, and rows with missing values are dropped.
 - EOData, and crop_mapping and volkert in the confirmatory test, are cut to a fixed stratified sample of 50,000 rows with the same seed (`protocol.ROW_CAP`).
